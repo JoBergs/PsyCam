@@ -205,16 +205,16 @@ if __name__ == "__main__":
     l_type = args.type - 1
     octaves = args.octaves
 
-    #camera = picamera.PiCamera()
-    #camera.resolution = (512, 384)
+    camera = picamera.PiCamera()
+    camera.resolution = (512, 384)
 
     # maybe close the camera everytime to free ram?
 
     try:
         while True:
             print 'snapshot'
-            #source_path = make_snapshot(camera)
-            source_path = 'sky_small.jpg'
+            source_path = make_snapshot(camera)
+            #source_path = 'sky_small.jpg'
 
             # overwrite octaves and layer with random values
             if args.random == True:
