@@ -215,6 +215,7 @@ def parse_arguments(sysargs):
 # we need:
 #   a snapshort function which is repetetly called from the __main__
 #   randomization option and normal input parsing without number of iterations
+# blabla
 
 if __name__ == "__main__":
 
