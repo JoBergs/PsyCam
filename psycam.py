@@ -73,6 +73,7 @@ class PsyCam(object):
         self.end = end
 
     def iterated_dream(self):
+        print 'in iterated dream'
         self.net.blobs.keys()
 
         frame = self.img
@@ -208,9 +209,13 @@ if __name__ == "__main__":
 
     camera = picamera.PiCamera()
 
+    # the snapshot prolly is too beig, should be 500px
+
     try:
         while True:
+            print 'snapshot'
             source_path = make_snapshot(camera)
+
 
             # overwrite octaves and layer with random values
             if args.random == True:
@@ -219,6 +224,7 @@ if __name__ == "__main__":
                 l_type = randint(0, len(layer_types)-1)
 
             layer = 'inception_' + numbering[depth] + '/' + layer_types[l_type]
+            print 'starting dream'
             psycam = PsyCam(net=net, source_path=source_path, 
                                             end=layer, octaves=octaves)
             psycam.iterated_dream()
