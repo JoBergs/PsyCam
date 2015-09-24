@@ -1,4 +1,4 @@
-import argparse, os, sys
+import argparse, os, sys, time
 
 from random import randint
 
@@ -228,6 +228,8 @@ if __name__ == "__main__":
             psycam = PsyCam(net=net, source_path=source_path, 
                                             end=layer, octaves=octaves)
             psycam.iterated_dream()
+            time.sleep(1)
+
     except:
         camera.close()
         print 'Quitting PsyCam'
