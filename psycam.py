@@ -62,10 +62,9 @@ def objective_L2(dst):
 
 
 class PsyCam(object):
-    def __init__(self, net, source_path, iterations, end, guide_path, octaves):
+    def __init__(self, net, source_path, end, guide_path, octaves):
         self.img = np.float32(PIL.Image.open(source_path))
         self.net = net
-        self.iterations = iterations
         self.objective = objective_L2
         self.octave_n = octaves
 
@@ -105,14 +104,13 @@ class PsyCam(object):
         h, w = frame.shape[:2]
         s = 0.05 # scale coefficient
 
-        for i in xrange(self.iterations):
-            if self.end:
-                frame = self.deepdream(frame, end=self.end, octave_n=self.octave_n)
-            else:            
-                frame = self.deepdream(frame, octave_n=self.octave_n)
+        if self.end:
+            frame = self.deepdream(frame, end=self.end, octave_n=self.octave_n)
+        else:            
+            frame = self.deepdream(frame, octave_n=self.octave_n)
 
-            PIL.Image.fromarray(np.uint8(frame)).save(output_path())
-            frame = nd.affine_transform(frame, [1-s,1-s,1], [h*s/2,w*s/2,0], order=1)
+        PIL.Image.fromarray(np.uint8(frame)).save(output_path())
+        frame = nd.affine_transform(frame, [1-s,1-s,1], [h*s/2,w*s/2,0], order=1)
 
     def make_step(self, step_size=1.5, end='inception_4c/output', 
                   jitter=32, clip=True):
@@ -190,10 +188,6 @@ def parse_arguments(sysargs):
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument('-s', '--source', nargs='?', const='sky_1024.jpg', 
                                      default='sky_1024.jpg', help='input filename')
-    parser.add_argument('-g', '--guide', nargs='?', default=None,
-                                    help='Target for guided dreams')
-    parser.add_argument('-i', '--iterations', nargs='?', type=int, const=1,
-                                     default=1, help='Number of iterations')
     parser.add_argument('-d', '--depth', nargs='?', metavar='int', type=int,
                                     choices=xrange(1, 10),  const=5, default=5,
                                     help='Depth of the dream as an value between 1 and 10')
@@ -249,8 +243,8 @@ if __name__ == "__main__":
                       layer_types[randint(0, len(layer_types)-1)])
     
     psycam = PsyCam(net=net, source_path=args.source, 
-                                   iterations=args.iterations, end=layer, 
-                                   guide_path=args.guide, octaves=octaves)
+                                    end=layer, 
+                                    guide_path=None, octaves=octaves)
     psycam.iterated_dream()
     
     
