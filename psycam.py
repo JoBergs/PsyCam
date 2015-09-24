@@ -3,6 +3,8 @@ import argparse, os, sys
 from random import randint
 
 # imports and basic notebook setup
+import os
+
 from cStringIO import StringIO
 import numpy as np
 import scipy.ndimage as nd
@@ -12,7 +14,7 @@ from google.protobuf import text_format
 
 import caffe
 
-import os
+import picamera
 
 # If your GPU supports CUDA and Caffe was built with CUDA support,
 # uncomment the following to run Caffe operations on the GPU.
@@ -185,6 +187,14 @@ def parse_arguments(sysargs):
 #   randomization option and normal input parsing without number of iterations
 # blabla
 
+def snapshot(camera):
+
+    
+ 
+    camera.capture('image1.jpg')
+    source_path = get_path aus anderem dir
+    return source_path
+
 if __name__ == "__main__":
 
     args = parse_arguments(sys.argv[1:])
@@ -192,23 +202,13 @@ if __name__ == "__main__":
     models_base = '../caffe/models'
     net = create_net(os.path.join(models_base, 'bvlc_googlenet/bvlc_googlenet.caffemodel'))
 
-    # model selection turned off since i found no way of producing good
-    # dreams with different models
-    '''
-    models = ('bvlc_googlenet/bvlc_googlenet.caffemodel',
-                    'bvlc_reference_caffenet/bvlc_reference_caffenet.caffemodel',
-                    'bvlc_reference_rcnn_ilsvrc13/bvlc_reference_rcnn_ilsvrc13.caffemodel',
-                    'finetune_flickr_style/finetune_flickr_style.caffemodel',
-                    'bvlc_alexnet/bvlc_alexnet.caffemodel')
-    
-    net = create_net(os.path.join(models_base, models[args.model-1]))
-    '''
-
     numbering = ['3a', '3b', '4a', '4b', '4c', '4d', '4e', '5a', '5b']
     layer_types = ['1x1', '3x3', '5x5', 'output', '5x5_reduce', '3x3_reduce']
 
     layer = 'inception_' + numbering[args.depth-1] + '/' + layer_types[args.type-1]
     octaves = args.octaves
+
+    camera = picamera.PiCamera()
 
     # overwrite octaves and layer with random values
     if args.random == True:
