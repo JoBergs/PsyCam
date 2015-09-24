@@ -187,9 +187,7 @@ def parse_arguments(sysargs):
 #   randomization option and normal input parsing without number of iterations
 # blabla
 
-def snapshot(camera):
-
-    
+def make_snapshot(camera):    
  
     camera.capture('image1.jpg')
     source_path = get_path aus anderem dir
@@ -209,6 +207,9 @@ if __name__ == "__main__":
     octaves = args.octaves
 
     camera = picamera.PiCamera()
+
+    while True:
+        source_path = make_snapshot()
 
     # overwrite octaves and layer with random values
     if args.random == True:
