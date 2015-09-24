@@ -62,39 +62,13 @@ def objective_L2(dst):
 
 
 class PsyCam(object):
-    def __init__(self, net, source_path, end, guide_path, octaves):
+    def __init__(self, net, source_path, end, octaves):
         self.img = np.float32(PIL.Image.open(source_path))
         self.net = net
         self.objective = objective_L2
         self.octave_n = octaves
 
         self.end = end
-
-        if guide_path:
-            self.guide_features = self.create_guide(guide_path)
-            self.objective = self.objective_guide
-
-    # make this a product of a generator function with guide_features in its scope
-    def objective_guide(self, dst):
-        x = dst.data[0].copy()
-        # guide_features is global here
-        y = self.guide_features
-        ch = x.shape[0]
-        x = x.reshape(ch,-1)
-        y = y.reshape(ch,-1)
-        A = x.T.dot(y) # compute the matrix of dot-products with guide features
-        dst.diff[0].reshape(ch,-1)[:] = y[:,A.argmax(1)] # select ones that match best
-
-    # use self.end instead of end
-    def create_guide(self, guide_path):
-        guide = np.float32(PIL.Image.open(guide_path))
-        h, w = guide.shape[:2]
-        src, dst = net.blobs['data'], net.blobs[self.end]
-        src.reshape(1,3,h,w)
-        src.data[0] = preprocess(net, guide)
-        self.net.forward(end=self.end)
-
-        return dst.data[0].copy()
 
     def iterated_dream(self):
         self.net.blobs.keys()
@@ -243,8 +217,7 @@ if __name__ == "__main__":
                       layer_types[randint(0, len(layer_types)-1)])
     
     psycam = PsyCam(net=net, source_path=args.source, 
-                                    end=layer, 
-                                    guide_path=None, octaves=octaves)
+                                    end=layer, octaves=octaves)
     psycam.iterated_dream()
     
     
