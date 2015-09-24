@@ -208,6 +208,7 @@ if __name__ == "__main__":
     octaves = args.octaves
 
     camera = picamera.PiCamera()
+    camera.resolution = (512, 384)
 
     # the snapshot prolly is too beig, should be 500px
 
