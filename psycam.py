@@ -190,7 +190,7 @@ def parse_arguments(sysargs):
 def make_snapshot(camera):    
  
     camera.capture('image1.jpg')
-    source_path = get_path aus anderem dir
+    source_path = None
     return source_path
 
 if __name__ == "__main__":
@@ -208,8 +208,12 @@ if __name__ == "__main__":
 
     camera = picamera.PiCamera()
 
-    while True:
-        source_path = make_snapshot()
+    try:
+        while True:
+            source_path = make_snapshot(camera)
+            print source_path
+    except:
+        print 'Quitting PsyCam'
 
     # overwrite octaves and layer with random values
     if args.random == True:
