@@ -220,7 +220,8 @@ if __name__ == "__main__":
             camera.resolution = (512, 384)
             print 'snapshot'
             source_path = make_snapshot(camera)
-            #camera.close()
+            camera.close()
+            print __dir__
             source_path = 'sky_small.jpg'
 
             # overwrite octaves and layer with random values
