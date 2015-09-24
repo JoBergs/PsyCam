@@ -217,7 +217,7 @@ if __name__ == "__main__":
         while True:
             # move into make snapshot...
             camera = picamera.PiCamera()
-            camera.resolution = (512, 384)
+            camera.resolution = (500, 370)
             print 'snapshot'
             source_path = make_snapshot(camera)
             camera.close()
