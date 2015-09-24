@@ -150,8 +150,8 @@ class PsyCam(object):
 def parse_arguments(sysargs):
     """ Setup the command line options. """
 
-    description = ''' deepdreaming.py is a handler script to simplify the usage
-        of Googles DeepDream algorithm. The DeepDream algorithm takes an image
+    description = '''psycam.py is a psycedelic surveilance camera using
+        Googles DeepDream algorithm. The DeepDream algorithm takes an image
         as input and runs an overexpressed pattern recognition in form of
         a convolutional neural network over it. 
         See the original Googleresearch blog post
@@ -163,8 +163,6 @@ def parse_arguments(sysargs):
         with the options -d 2 -t 5.'''
 
     parser = argparse.ArgumentParser(description=description)
-    parser.add_argument('-s', '--source', nargs='?', const='sky_1024.jpg', 
-                                     default='sky_1024.jpg', help='input filename')
     parser.add_argument('-d', '--depth', nargs='?', metavar='int', type=int,
                                     choices=xrange(1, 10),  const=5, default=5,
                                     help='Depth of the dream as an value between 1 and 10')
@@ -176,7 +174,7 @@ def parse_arguments(sysargs):
                                          const=5, default=5, 
                                          help='The number of scales the algorithm is applied to')
     parser.add_argument('-r', '--random', action='store_true', 
-                                         help='Overwrite depth, layer type and octave with random values ')
+                                         help='Overwrite depth, layer type and octave with random values')
     #parser.add_argument('-m', '--model', nargs='?', metavar='int', type=int,
     #                                choices=xrange(1, 6), help='model 1..5',
     #                                const=1, default=1)
@@ -210,13 +208,10 @@ if __name__ == "__main__":
     camera = picamera.PiCamera()
     camera.resolution = (512, 384)
 
-    # the snapshot prolly is too beig, should be 500px
-
     try:
         while True:
             print 'snapshot'
             source_path = make_snapshot(camera)
-
 
             # overwrite octaves and layer with random values
             if args.random == True:
