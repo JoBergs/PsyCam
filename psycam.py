@@ -61,7 +61,7 @@ def objective_L2(dst):
     dst.diff[:] = dst.data 
 
 
-class Dreamer(object):
+class PsyCam(object):
     def __init__(self, net, source_path, iterations, end, guide_path, octaves):
         self.img = np.float32(PIL.Image.open(source_path))
         self.net = net
@@ -243,10 +243,10 @@ if __name__ == "__main__":
         layer = ('inception_' + numbering[randint(0, len(numbering)-1)] + '/' +
                       layer_types[randint(0, len(layer_types)-1)])
     
-    dreamer = Dreamer(net=net, source_path=args.source, 
+    psycam = PsyCam(net=net, source_path=args.source, 
                                    iterations=args.iterations, end=layer, 
                                    guide_path=args.guide, octaves=octaves)
-    dreamer.iterated_dream()
+    psycam.iterated_dream()
     
     
 

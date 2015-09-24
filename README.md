@@ -1,4 +1,4 @@
-DeepDream
+PsyCam
 ============
 
 This GitHub repository is an extension of the original GitHub repository
