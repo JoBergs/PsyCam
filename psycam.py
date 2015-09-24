@@ -221,7 +221,7 @@ if __name__ == "__main__":
             print 'snapshot'
             source_path = make_snapshot(camera)
             camera.close()
-            print __dir__
+            print dir()
             source_path = 'sky_small.jpg'
 
             # overwrite octaves and layer with random values
