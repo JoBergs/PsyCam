@@ -229,6 +229,7 @@ if __name__ == "__main__":
                                             end=layer, octaves=octaves)
             psycam.iterated_dream()
     except:
+        camera.close()
         print 'Quitting PsyCam'
 
 
