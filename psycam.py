@@ -208,6 +208,10 @@ if __name__ == "__main__":
 
 
     # maybe close the camera everytime to free ram?
+    # maybe del camera works?
+    # or does the picture need to be smaller?
+
+    # now, test sky_small, but create a snapshot before
 
     try:
         while True:
@@ -216,8 +220,8 @@ if __name__ == "__main__":
             camera.resolution = (512, 384)
             print 'snapshot'
             source_path = make_snapshot(camera)
-            camera.close()
-            #source_path = 'sky_small.jpg'
+            #camera.close()
+            source_path = 'sky_small.jpg'
 
             # overwrite octaves and layer with random values
             if args.random == True:
