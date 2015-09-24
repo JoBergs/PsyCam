@@ -21,17 +21,17 @@ import picamera
 # caffe.set_mode_gpu()
 # caffe.set_device(0) # select GPU device if multiple devices exist
 
-def output_path():
+def get_output_path(base_dir):
     """ Create an output filename: look into folder dreams,
         return lowest INTEGER.jpg with leading zeros, e.g. 00020.jpg """
     # faster with sort
 
     index=0
-    output_file = "dreams/%06d.jpg"%index
+    output_file = os.path.join(base_dir, "%06d.jpg"%index)
 
     while os.path.exists(output_file):
         index += 1
-        output_file = "dreams/%06d.jpg"%index
+        output_file = os.path.join(base_dir, "%06d.jpg"%index)
 
     return output_file
 
@@ -85,7 +85,7 @@ class PsyCam(object):
         else:            
             frame = self.deepdream(frame, octave_n=self.octave_n)
 
-        PIL.Image.fromarray(np.uint8(frame)).save(output_path())
+        PIL.Image.fromarray(np.uint8(frame)).save(get_output_path('dreams/'))
         frame = nd.affine_transform(frame, [1-s,1-s,1], [h*s/2,w*s/2,0], order=1)
 
     def make_step(self, step_size=1.5, end='inception_4c/output', 
@@ -188,9 +188,8 @@ def parse_arguments(sysargs):
 # blabla
 
 def make_snapshot(camera):    
- 
-    camera.capture('image1.jpg')
-    source_path = None
+    source_path = get_output_path('snapshots')
+    camera.capture(source_path)
     return source_path
 
 if __name__ == "__main__":
