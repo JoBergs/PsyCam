@@ -202,7 +202,8 @@ if __name__ == "__main__":
     numbering = ['3a', '3b', '4a', '4b', '4c', '4d', '4e', '5a', '5b']
     layer_types = ['1x1', '3x3', '5x5', 'output', '5x5_reduce', '3x3_reduce']
 
-    layer = 'inception_' + numbering[args.depth-1] + '/' + layer_types[args.type-1]
+    depth = args.depth - 1
+    l_type = args.type - 1
     octaves = args.octaves
 
     camera = picamera.PiCamera()
@@ -210,19 +211,23 @@ if __name__ == "__main__":
     try:
         while True:
             source_path = make_snapshot(camera)
-            print source_path
+
+            # overwrite octaves and layer with random values
+            if args.random == True:
+                octaves = randint(1, 11)
+                depth = randint(0, len(numbering)-1)
+                l_type = randint(0, len(layer_types)-1)
+
+            layer = 'inception_' + numbering[depth] + '/' + layer_types[l_type]
+            psycam = PsyCam(net=net, source_path=source_path, 
+                                            end=layer, octaves=octaves)
+            psycam.iterated_dream()
     except:
         print 'Quitting PsyCam'
 
-    # overwrite octaves and layer with random values
-    if args.random == True:
-        octaves = randint(1, 11)
-        layer = ('inception_' + numbering[randint(0, len(numbering)-1)] + '/' +
-                      layer_types[randint(0, len(layer_types)-1)])
+
     
-    psycam = PsyCam(net=net, source_path=args.source, 
-                                    end=layer, octaves=octaves)
-    psycam.iterated_dream()
+
     
     
 
