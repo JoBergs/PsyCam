@@ -214,13 +214,14 @@ if __name__ == "__main__":
                 octave = randint(1, 11)
                 l_index = randint(0, len(numbering)-1)
                 l_type = randint(0, len(layer_types)-1)
-                print 'INFO: '
-                print 'octave: ' + str(octave)
-                print 'layer: ' + str(layer)  + ' ' +    numbering[l_index]        
-                print 'layer type: ' + str(l_type)  + ' ' +    layer_types[l_type]                  
-
-
+               
             layer = 'inception_' + numbering[l_index] + '/' + layer_types[l_type]
+
+            print 'INFO: '
+            print 'octave: ' + str(octave)
+            print 'layer: ' + str(layer)  + ' ' +    numbering[l_index]        
+            print 'layer type: ' + str(l_type)  + ' ' +    layer_types[l_type]   
+
             print 'starting dream'
             psycam = PsyCam(net=net, source_path=source_path, 
                                             end=layer, octaves=octave)
