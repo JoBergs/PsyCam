@@ -57,15 +57,14 @@ def objective_L2(dst):
 
 
 class PsyCam(object):
-    def __init__(self, net, source_path, end, octaves):
-        self.img = np.float32(PIL.Image.open(source_path))
+    def __init__(self, net):        
         self.net = net
+
+    def iterated_dream(self, source_path, end, octaves):
+        self.img = np.float32(PIL.Image.open(source_path))
         self.objective = objective_L2
         self.octave_n = octaves
-
         self.end = end
-
-    def iterated_dream(self):
         print 'in iterated dream'
         self.net.blobs.keys()
 
@@ -210,6 +209,10 @@ if __name__ == "__main__":
 
     # it seems as if layer 4e crashes; try earlier layers subsequently
 
+    # Try removing all ipython references!
+
+    psycam = PsyCam(net=net)
+
     try:
         while True:
             source_path = make_snapshot()
@@ -228,9 +231,13 @@ if __name__ == "__main__":
             print 'layer type: ' + str(l_type)  + ' ' +    layer_types[l_type]   
 
             print 'starting dream'
-            psycam = PsyCam(net=net, source_path=source_path, 
-                                            end=layer, octaves=octave)
-            psycam.iterated_dream()
+            # create psycam only with net;
+            # pass the other arguments in iterated_dream
+            # creation out of loop
+            # try deleting modules
+
+            psycam.iterated_dream(source_path=source_path, 
+                                                    end=layer, octaves=octave)
             time.sleep(1)
 
             if args.snapshot == True:
