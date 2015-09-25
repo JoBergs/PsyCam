@@ -194,7 +194,7 @@ if __name__ == "__main__":
     numbering = ['3a', '3b', '4a', '4b', '4c', '4d', '4e', '5a', '5b']
     layer_types = ['1x1', '3x3', '5x5', 'output', '5x5_reduce', '3x3_reduce']
 
-    depth = args.depth - 1
+    l_index = args.depth - 1
     l_type = args.type - 1
     octaves = args.octaves
 
@@ -211,15 +211,16 @@ if __name__ == "__main__":
 
             # overwrite octaves and layer with random values
             if args.random == True:
+                octaves = randint(1, 11)
+                l_index = randint(0, len(numbering)-1)
+                l_type = randint(0, len(layer_types)-1)
                 print 'INFO: '
                 print 'octave: ' + str(octave)
                 print 'layer: ' + str(layer)  + ' ' +    numbering[l_index]        
                 print 'layer type: ' + str(l_type)  + ' ' +    layer_types[l_type]                  
-                octaves = randint(1, 11)
-                depth = randint(0, len(numbering)-1)
-                l_type = randint(0, len(layer_types)-1)
 
-            layer = 'inception_' + numbering[depth] + '/' + layer_types[l_type]
+
+            layer = 'inception_' + numbering[l_index] + '/' + layer_types[l_type]
             print 'starting dream'
             psycam = PsyCam(net=net, source_path=source_path, 
                                             end=layer, octaves=octaves)
