@@ -14,7 +14,7 @@ from google.protobuf import text_format
 
 import caffe
 
-import picamera
+
 
 # If your GPU supports CUDA and Caffe was built with CUDA support,
 # uncomment the following to run Caffe operations on the GPU.
@@ -187,8 +187,15 @@ def parse_arguments(sysargs):
 # blabla
 
 def make_snapshot(camera):    
+    import picamera
     source_path = get_output_path('snapshots')
     camera.capture(source_path)
+    camera = picamera.PiCamera()
+    camera.resolution = (500, 280)
+    print 'snapshot'
+    camera.close()
+    del camera
+    del picamera
     return source_path
 
 if __name__ == "__main__":
@@ -218,11 +225,9 @@ if __name__ == "__main__":
     try:
         while True:
             # move into make snapshot...
-            camera = picamera.PiCamera()
-            camera.resolution = (500, 280)
-            print 'snapshot'
+
             source_path = make_snapshot(camera)
-            camera.close()
+            
             #print dir()
             #source_path = 'sky_small.jpg'
 
@@ -240,7 +245,6 @@ if __name__ == "__main__":
             time.sleep(1)
 
     except:
-        camera.close()
         print 'Quitting PsyCam'
 
 
