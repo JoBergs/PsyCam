@@ -169,6 +169,9 @@ def parse_arguments(sysargs):
     parser.add_argument('-r', '--random', action='store_true', 
                                          help='Overwrite depth, layer type and octave with random values')
 
+    parser.add_argument('-s', '--snapshot', action='store_true', 
+                                         help='Make a single snapshot instead of running permanently')
+
     return parser.parse_args(sysargs)
 
 
@@ -205,6 +208,8 @@ if __name__ == "__main__":
     # random does not work frequently, some values cause problems
     #   remove modules which are not really required
 
+    # it seems as if layer 4e crashes; try earlier layers subsequently
+
     try:
         while True:
             source_path = make_snapshot()
@@ -227,6 +232,9 @@ if __name__ == "__main__":
                                             end=layer, octaves=octave)
             psycam.iterated_dream()
             time.sleep(1)
+
+            if args.snapshot == True:
+                break
 
     except Exception, e:
         import traceback
