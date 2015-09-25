@@ -186,7 +186,7 @@ def parse_arguments(sysargs):
 #   randomization option and normal input parsing without number of iterations
 # blabla
 
-def make_snapshot(camera):    
+def make_snapshot():    
     import picamera
     source_path = get_output_path('snapshots')
     camera.capture(source_path)
@@ -226,7 +226,7 @@ if __name__ == "__main__":
         while True:
             # move into make snapshot...
 
-            source_path = make_snapshot(camera)
+            source_path = make_snapshot()
             
             #print dir()
             #source_path = 'sky_small.jpg'
