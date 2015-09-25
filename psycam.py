@@ -9,7 +9,6 @@ from cStringIO import StringIO
 import numpy as np
 import scipy.ndimage as nd
 import PIL.Image
-from IPython.display import clear_output, Image, display
 from google.protobuf import text_format
 
 import caffe
@@ -131,7 +130,6 @@ class PsyCam(object):
                     vis = vis*(255.0/np.percentile(vis, 99.98))
                 # is octave, i the depth?
                 print octave, i, end, vis.shape
-                clear_output(wait=True)
                 
             # extract details produced on the current octave
             detail = src.data[0]-octave_base
