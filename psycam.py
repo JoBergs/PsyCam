@@ -188,10 +188,10 @@ def parse_arguments(sysargs):
 
 def make_snapshot():    
     import picamera
-    source_path = get_output_path('snapshots')
-    camera.capture(source_path)
     camera = picamera.PiCamera()
     camera.resolution = (500, 280)
+    source_path = get_output_path('snapshots')
+    camera.capture(source_path)
     print 'snapshot'
     camera.close()
     del camera
