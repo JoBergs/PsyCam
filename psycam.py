@@ -211,7 +211,7 @@ if __name__ == "__main__":
 
             # overwrite octaves and layer with random values
             if args.random == True:
-                octaves = randint(1, 11)
+                octave = randint(1, 11)
                 l_index = randint(0, len(numbering)-1)
                 l_type = randint(0, len(layer_types)-1)
                 print 'INFO: '
@@ -223,7 +223,7 @@ if __name__ == "__main__":
             layer = 'inception_' + numbering[l_index] + '/' + layer_types[l_type]
             print 'starting dream'
             psycam = PsyCam(net=net, source_path=source_path, 
-                                            end=layer, octaves=octaves)
+                                            end=layer, octaves=octave)
             psycam.iterated_dream()
             time.sleep(1)
 
