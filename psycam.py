@@ -200,12 +200,21 @@ if __name__ == "__main__":
 
     # change that: create psycam just once, pass params in iterated dream
 
+    # implement snapshot mode -s
+    # delete modules which are no more required
+    # random does not work frequently, some values cause problems
+    #   remove modules which are not really required
+
     try:
         while True:
             source_path = make_snapshot()
 
             # overwrite octaves and layer with random values
             if args.random == True:
+                print 'INFO: '
+                print 'octave: ' + str(octave)
+                print 'layer: ' + str(layer)  + ' ' +    numbering[l_index]        
+                print 'layer type: ' + str(l_type)  + ' ' +    layer_types[l_type]                  
                 octaves = randint(1, 11)
                 depth = randint(0, len(numbering)-1)
                 l_type = randint(0, len(layer_types)-1)
