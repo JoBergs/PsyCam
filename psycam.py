@@ -1,5 +1,7 @@
 import argparse, os, sys, time
 
+import psutil
+
 from random import randint
 
 # imports and basic notebook setup
@@ -187,11 +189,6 @@ def make_snapshot():
 
 if __name__ == "__main__":
 
-    import psutil
-
-    print 'Memory before:'
-    psutil.virtual_memory()
-
     args = parse_arguments(sys.argv[1:])
 
     models_base = '../caffe/models'
@@ -236,10 +233,15 @@ if __name__ == "__main__":
     # see psutil
     #   https://github.com/giampaolo/psutil/blob/master/INSTALL.rst
 
+    print 'Memory before:'
+    print psutil.virtual_memory()
+
     psycam = PsyCam(net=net)
 
     try:
         while True:
+
+
             source_path = make_snapshot()
 
             # overwrite octaves and layer with random values
@@ -274,7 +276,7 @@ if __name__ == "__main__":
             time.sleep(1)
 
             print 'Memory after:'
-            psutil.virtual_memory()
+            print psutil.virtual_memory()
 
             if args.snapshot == True:
                 break
