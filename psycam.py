@@ -213,6 +213,8 @@ if __name__ == "__main__":
 
     # now, test sky_small, but create a snapshot before
 
+    # change that: create psycam just once, pass params in iterated dream
+
     try:
         while True:
             # move into make snapshot...
