@@ -65,7 +65,8 @@ class PsyCam(object):
         self.octave_n = octaves
         self.end = end
         print 'in iterated dream'
-        self.net.blobs.keys()
+        # OFF to hide net displaying
+        #self.net.blobs.keys()
 
         frame = self.img
 
@@ -186,6 +187,11 @@ def make_snapshot():
 
 if __name__ == "__main__":
 
+    import psutil
+
+    print 'Memory before:'
+    psutil.virtual_memory()
+
     args = parse_arguments(sys.argv[1:])
 
     models_base = '../caffe/models'
@@ -215,6 +221,21 @@ if __name__ == "__main__":
 
     # update readme ect.
 
+    # default octave of notebook is 4
+
+    # test original deepdream script for higher octaves...
+
+    # every time i reduce the octave, the algo crashes earlier!
+
+    # even 4c/output didn't work the last time; the net is displayed in the beginning,
+    #  somehow
+
+    # why crashes the net factory for other models?
+
+    # can i somehow print the RAM usage?
+    # see psutil
+    #   https://github.com/giampaolo/psutil/blob/master/INSTALL.rst
+
     psycam = PsyCam(net=net)
 
     try:
@@ -227,9 +248,13 @@ if __name__ == "__main__":
                 l_index = randint(0, len(numbering)-1)
                 l_type = randint(0, len(layer_types)-1)
 
-            #octave = 11
+            #octave = 11  # 11, 10 not working for -d 5 and -t 4
             #l_index = 5
             #l_type = 4
+
+            # try o=9 for max d and all t
+
+            # it seems as if o = 9 doesn't work, too; verify after reboot
                
             layer = 'inception_' + numbering[l_index] + '/' + layer_types[l_type]
 
@@ -247,6 +272,9 @@ if __name__ == "__main__":
             psycam.iterated_dream(source_path=source_path, 
                                                     end=layer, octaves=octave)
             time.sleep(1)
+
+            print 'Memory after:'
+            psutil.virtual_memory()
 
             if args.snapshot == True:
                 break
