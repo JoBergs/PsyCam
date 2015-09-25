@@ -227,7 +227,9 @@ if __name__ == "__main__":
             psycam.iterated_dream()
             time.sleep(1)
 
-    except:
+    except Exception, e:
+        import traceback
+        print traceback.format_exc()
         print 'Quitting PsyCam'
 
 
