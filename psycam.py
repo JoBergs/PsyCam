@@ -14,13 +14,6 @@ from google.protobuf import text_format
 
 import caffe
 
-
-
-# If your GPU supports CUDA and Caffe was built with CUDA support,
-# uncomment the following to run Caffe operations on the GPU.
-# caffe.set_mode_gpu()
-# caffe.set_device(0) # select GPU device if multiple devices exist
-
 def get_output_path(base_dir):
     """ Create an output filename: look into folder dreams,
         return lowest INTEGER.jpg with leading zeros, e.g. 00020.jpg """
@@ -175,16 +168,9 @@ def parse_arguments(sysargs):
                                          help='The number of scales the algorithm is applied to')
     parser.add_argument('-r', '--random', action='store_true', 
                                          help='Overwrite depth, layer type and octave with random values')
-    #parser.add_argument('-m', '--model', nargs='?', metavar='int', type=int,
-    #                                choices=xrange(1, 6), help='model 1..5',
-    #                                const=1, default=1)
 
     return parser.parse_args(sysargs)
 
-# we need:
-#   a snapshort function which is repetetly called from the __main__
-#   randomization option and normal input parsing without number of iterations
-# blabla
 
 def make_snapshot():    
     import picamera
@@ -212,40 +198,27 @@ if __name__ == "__main__":
     l_type = args.type - 1
     octaves = args.octaves
 
-
-
-    # maybe close the camera everytime to free ram?
-    # maybe del camera works?
-    # or does the picture need to be smaller?
-
-    # now, test sky_small, but create a snapshot before
-
     # change that: create psycam just once, pass params in iterated dream
 
-    #try:
-    while True:
-        # move into make snapshot...
+    try:
+        while True:
+            source_path = make_snapshot()
 
-        source_path = make_snapshot()
-        
-        #print dir()
-        #source_path = 'sky_small.jpg'
+            # overwrite octaves and layer with random values
+            if args.random == True:
+                octaves = randint(1, 11)
+                depth = randint(0, len(numbering)-1)
+                l_type = randint(0, len(layer_types)-1)
 
-        # overwrite octaves and layer with random values
-        if args.random == True:
-            octaves = randint(1, 11)
-            depth = randint(0, len(numbering)-1)
-            l_type = randint(0, len(layer_types)-1)
+            layer = 'inception_' + numbering[depth] + '/' + layer_types[l_type]
+            print 'starting dream'
+            psycam = PsyCam(net=net, source_path=source_path, 
+                                            end=layer, octaves=octaves)
+            psycam.iterated_dream()
+            time.sleep(1)
 
-        layer = 'inception_' + numbering[depth] + '/' + layer_types[l_type]
-        print 'starting dream'
-        psycam = PsyCam(net=net, source_path=source_path, 
-                                        end=layer, octaves=octaves)
-        psycam.iterated_dream()
-        time.sleep(1)
-
-    #except:
-    #    print 'Quitting PsyCam'
+    except:
+        print 'Quitting PsyCam'
 
 
     
