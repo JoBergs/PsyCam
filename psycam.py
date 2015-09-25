@@ -198,7 +198,7 @@ if __name__ == "__main__":
 
     l_index = args.depth - 1
     l_type = args.type - 1
-    octaves = args.octaves
+    octave = args.octaves
 
     # change that: create psycam just once, pass params in iterated dream
 
@@ -210,6 +210,10 @@ if __name__ == "__main__":
     # it seems as if layer 4e crashes; try earlier layers subsequently
 
     # Try removing all ipython references!
+
+    # find max layer, type and octave only after the other optimizations
+    #   are done
+    # (maybe a specific depth/type combo doesn't exist)
 
     psycam = PsyCam(net=net)
 
