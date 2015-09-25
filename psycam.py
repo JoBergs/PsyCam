@@ -227,9 +227,9 @@ if __name__ == "__main__":
                 l_index = randint(0, len(numbering)-1)
                 l_type = randint(0, len(layer_types)-1)
 
-            octave = 11
-            l_index = 5
-            l_type = 4
+            #octave = 11
+            #l_index = 5
+            #l_type = 4
                
             layer = 'inception_' + numbering[l_index] + '/' + layer_types[l_type]
 
