@@ -222,30 +222,30 @@ if __name__ == "__main__":
 
     # change that: create psycam just once, pass params in iterated dream
 
-    try:
-        while True:
-            # move into make snapshot...
+    #try:
+    while True:
+        # move into make snapshot...
 
-            source_path = make_snapshot()
-            
-            #print dir()
-            #source_path = 'sky_small.jpg'
+        source_path = make_snapshot()
+        
+        #print dir()
+        #source_path = 'sky_small.jpg'
 
-            # overwrite octaves and layer with random values
-            if args.random == True:
-                octaves = randint(1, 11)
-                depth = randint(0, len(numbering)-1)
-                l_type = randint(0, len(layer_types)-1)
+        # overwrite octaves and layer with random values
+        if args.random == True:
+            octaves = randint(1, 11)
+            depth = randint(0, len(numbering)-1)
+            l_type = randint(0, len(layer_types)-1)
 
-            layer = 'inception_' + numbering[depth] + '/' + layer_types[l_type]
-            print 'starting dream'
-            psycam = PsyCam(net=net, source_path=source_path, 
-                                            end=layer, octaves=octaves)
-            psycam.iterated_dream()
-            time.sleep(1)
+        layer = 'inception_' + numbering[depth] + '/' + layer_types[l_type]
+        print 'starting dream'
+        psycam = PsyCam(net=net, source_path=source_path, 
+                                        end=layer, octaves=octaves)
+        psycam.iterated_dream()
+        time.sleep(1)
 
-    except:
-        print 'Quitting PsyCam'
+    #except:
+    #    print 'Quitting PsyCam'
 
 
     
