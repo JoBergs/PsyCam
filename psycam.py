@@ -233,6 +233,10 @@ if __name__ == "__main__":
     # see psutil
     #   https://github.com/giampaolo/psutil/blob/master/INSTALL.rst
 
+    # testing octaves again
+
+    # "percent" rises slowly
+
     print 'Memory before:'
     print psutil.virtual_memory()
 
