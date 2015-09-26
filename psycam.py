@@ -163,7 +163,7 @@ def parse_arguments(sysargs):
                                     choices=xrange(1, 10),
                                     const=4, default=4, help='Layer type as an value between 1 and 6')
     parser.add_argument('-o', '--octaves', nargs='?', metavar='int', type=int,
-                                         choices=xrange(1, 12),
+                                         choices=xrange(1, 10),
                                          const=5, default=5, 
                                          help='The number of scales the algorithm is applied to')
     parser.add_argument('-r', '--random', action='store_true', 
@@ -201,41 +201,23 @@ if __name__ == "__main__":
     l_type = args.type - 1
     octave = args.octaves
 
-    # change that: create psycam just once, pass params in iterated dream
 
-    # implement snapshot mode -s
     # delete modules which are no more required
-    # random does not work frequently, some values cause problems
-    #   remove modules which are not really required
-
-    # it seems as if layer 4e crashes; try earlier layers subsequently
-
-    # Try removing all ipython references!
-
-    # find max layer, type and octave only after the other optimizations
-    #   are done
-    # (maybe a specific depth/type combo doesn't exist)
 
     # update readme ect.
-
-    # default octave of notebook is 4
-
-    # test original deepdream script for higher octaves...
-
-    # every time i reduce the octave, the algo crashes earlier!
 
     # even 4c/output didn't work the last time; the net is displayed in the beginning,
     #  somehow
 
-    # why crashes the net factory for other models?
+    # why does the net factory for other models crash?
 
-    # can i somehow print the RAM usage?
-    # see psutil
-    #   https://github.com/giampaolo/psutil/blob/master/INSTALL.rst
+    # could the RAM be cleaned, garbage collected or s.t. after every run?
 
-    # testing octaves again
+    # testing octaves again: not 11, 10; starts calculation for 9
 
-    # "percent" rises slowly
+    # RAM "percent" usage rises slowly
+
+    # octave 9 worked, try adjusted random mode
 
     print 'Memory before:'
     print psutil.virtual_memory()
@@ -245,12 +227,11 @@ if __name__ == "__main__":
     try:
         while True:
 
-
             source_path = make_snapshot()
 
             # overwrite octaves and layer with random values
             if args.random == True:
-                octave = randint(1, 11)
+                octave = randint(1, 9)
                 l_index = randint(0, len(numbering)-1)
                 l_type = randint(0, len(layer_types)-1)
 
@@ -258,7 +239,7 @@ if __name__ == "__main__":
             #l_index = 5
             #l_type = 4
 
-            # try o=9 for max d and all t
+            # try o=9 for max d and all t -> NOW
 
             # it seems as if o = 9 doesn't work, too; verify after reboot
                
