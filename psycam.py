@@ -157,10 +157,10 @@ def parse_arguments(sysargs):
 
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument('-d', '--depth', nargs='?', metavar='int', type=int,
-                                    choices=xrange(1, 10),  const=5, default=5,
+                                    choices=xrange(1, 5),  const=5, default=5,
                                     help='Depth of the dream as an value between 1 and 10')
     parser.add_argument('-t', '--type', nargs='?', metavar='int', type=int,
-                                    choices=xrange(1, 10),
+                                    choices=xrange(1, 6),
                                     const=4, default=4, help='Layer type as an value between 1 and 6')
     parser.add_argument('-o', '--octaves', nargs='?', metavar='int', type=int,
                                          choices=xrange(1, 10),
@@ -194,7 +194,7 @@ if __name__ == "__main__":
     models_base = '../caffe/models'
     net = create_net(os.path.join(models_base, 'bvlc_googlenet/bvlc_googlenet.caffemodel'))
 
-    numbering = ['3a', '3b', '4a', '4b', '4c', '4d', '4e', '5a', '5b']
+    numbering = ['3a', '3b', '4a', '4b', '4c']
     layer_types = ['1x1', '3x3', '5x5', 'output', '5x5_reduce', '3x3_reduce']
 
     l_index = args.depth - 1
@@ -218,6 +218,25 @@ if __name__ == "__main__":
     # RAM "percent" usage rises slowly
 
     # octave 9 worked, try adjusted random mode
+
+    # -o 9 -d 9 -t 6 failed
+
+    # -o 8 worked
+
+    # -o 8 -d 9 failed
+    # -o 7 -d 9 failed
+    # -o 4 -d 9 failed
+    # -o 4 -d 8 failed
+    # -o 8 -d 8 failed
+    # -o 4 -d 5 worked
+    # -o 4 -d 6 failed
+    # -o 9 -d 5 failed
+
+    # -d 6 failed
+
+    # play with depth default and other types next
+
+    # i think deep layyers are bad
 
     print 'Memory before:'
     print psutil.virtual_memory()
