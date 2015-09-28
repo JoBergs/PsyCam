@@ -195,6 +195,8 @@ if __name__ == "__main__":
     net = create_net(os.path.join(models_base, 'bvlc_googlenet/bvlc_googlenet.caffemodel'))
 
     numbering = ['3a', '3b', '4a', '4b', '4c']
+    #test
+    numbering = ['4c']
     layer_types = ['1x1', '3x3', '5x5', 'output', '5x5_reduce', '3x3_reduce']
 
     l_index = args.depth - 1
@@ -213,30 +215,13 @@ if __name__ == "__main__":
 
     # could the RAM be cleaned, garbage collected or s.t. after every run?
 
-    # testing octaves again: not 11, 10; starts calculation for 9
-
-    # RAM "percent" usage rises slowly
+    # RAM "percent" usage rises slowly?
 
     # octave 9 worked, try adjusted random mode
 
-    # -o 9 -d 9 -t 6 failed
-
-    # -o 8 worked
-
-    # -o 8 -d 9 failed
-    # -o 7 -d 9 failed
-    # -o 4 -d 9 failed
-    # -o 4 -d 8 failed
-    # -o 8 -d 8 failed
-    # -o 4 -d 5 worked
-    # -o 4 -d 6 failed
-    # -o 9 -d 5 failed
-
-    # -d 6 failed
+    # seems to work...
 
     # play with depth default and other types next
-
-    # i think deep layyers are bad
 
     print 'Memory before:'
     print psutil.virtual_memory()
@@ -244,7 +229,8 @@ if __name__ == "__main__":
     psycam = PsyCam(net=net)
 
     try:
-        while True:
+        #while True:
+        for layer_type in layer_types:
 
             source_path = make_snapshot()
 
@@ -262,12 +248,14 @@ if __name__ == "__main__":
 
             # it seems as if o = 9 doesn't work, too; verify after reboot
                
-            layer = 'inception_' + numbering[l_index] + '/' + layer_types[l_type]
+            #layer = 'inception_' + numbering[l_index] + '/' + layer_types[l_type]
+            layer = 'inception_' + numbering[l_index] + '/' + layer_type
 
             print 'INFO: '
             print 'octave: ' + str(octave)
             print 'layer: ' + str(layer)  + ' ' +    numbering[l_index]        
-            print 'layer type: ' + str(l_type)  + ' ' +    layer_types[l_type]   
+            #print 'layer type: ' + str(l_type)  + ' ' +    layer_types[l_type]   
+            print 'layer type: ' + str(l_type)  + ' ' +    layer_type 
 
             print 'starting dream'
             # create psycam only with net;
