@@ -213,18 +213,10 @@ if __name__ == "__main__":
 
     # RAM "percent" usage rises slowly?
 
-    # octave 9 worked, try adjusted random mode
-
-    # seems to work...
-
-    # play with depth default and other types next
-
     psycam = PsyCam(net=net)
 
     try:
         while True:
-        #for layer_type in layer_types:
-
             source_path = make_snapshot()
 
             # overwrite octaves and layer with random values
@@ -232,26 +224,16 @@ if __name__ == "__main__":
                 octave = randint(1, 9)
                 l_index = randint(0, len(numbering)-1)
                 l_type = randint(0, len(layer_types)-1)
-
-            #octave = 11  # 11, 10 not working for -d 5 and -t 4
-            #l_index = 5
-            #l_type = 4
-
-            # try o=9 for max d and all t -> NOW
-
-            # it seems as if o = 9 doesn't work, too; verify after reboot
                
             layer = 'inception_' + numbering[l_index] + '/' + layer_types[l_type]
-            #layer = 'inception_' + numbering[l_index] + '/' + layer_type
 
             print 'INFO: '
             print 'octave: ' + str(octave)
             print 'layer: ' + str(layer)  + ' ' +    numbering[l_index]        
             print 'layer type: ' + str(l_type)  + ' ' +    layer_types[l_type]   
-            #print 'layer type: ' + str(l_type)  + ' ' +    layer_type 
 
             print 'starting dream'
-            # create psycam only with net;
+            # create psycam only with net(create net only when required);
             # pass the other arguments in iterated_dream
             # creation out of loop
             # try deleting modules
