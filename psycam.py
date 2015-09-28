@@ -62,7 +62,7 @@ class PsyCam(object):
         self.octave_n = octaves
         self.end = end
         print 'in iterated dream'
-        # OFF to hide net displaying
+        # OFF to hide net displaying(doesn't work...)
         #self.net.blobs.keys()
 
         frame = self.img

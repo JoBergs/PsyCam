@@ -37,6 +37,7 @@ Beware of the Critters!
 Output filename
 --------------------------------
 The output filename will be the higest 5-digit integer number in ./dreams which
-is not occupied already, e.g. "00023.jpg". The Snapshot will be stored with the same[EDIT]
+is not occupied already, e.g. "00023.jpg". The Snapshot will be stored with the same Format but in
+./snaphots. To synchonize the filename, empty both directories with rm ./dreams/*.jpg.s
 
 * [Johannes Bergs](mailto:jo@knight-of-pi.org)
