@@ -199,19 +199,11 @@ if __name__ == "__main__":
     l_type = args.type - 1
     octave = args.octaves
 
-
-    # delete modules which are no more required
-
+    # delete modules that are no more required
     # update readme ect.
-
-    # even 4c/output didn't work the last time; the net is displayed in the beginning,
-    #  somehow
-
     # why does the net factory for other models crash?
-
     # could the RAM be cleaned, garbage collected or s.t. after every run?
-
-    # RAM "percent" usage rises slowly?
+    # create net only when required;
 
     psycam = PsyCam(net=net)
 
@@ -226,17 +218,7 @@ if __name__ == "__main__":
                 l_type = randint(0, len(layer_types)-1)
                
             layer = 'inception_' + numbering[l_index] + '/' + layer_types[l_type]
-
-            print 'INFO: '
-            print 'octave: ' + str(octave)
-            print 'layer: ' + str(layer)  + ' ' +    numbering[l_index]        
-            print 'layer type: ' + str(l_type)  + ' ' +    layer_types[l_type]   
-
-            print 'starting dream'
-            # create psycam only with net(create net only when required);
-            # pass the other arguments in iterated_dream
-            # creation out of loop
-            # try deleting modules
+            print layer
 
             psycam.iterated_dream(source_path=source_path, 
                                                     end=layer, octaves=octave)
