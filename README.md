@@ -14,6 +14,16 @@ The Installation of DeepDream is quite delicate; see this tutorial
 http://www.knight-of-pi.org/deepdreaming-on-a-raspberry-pi-2/
 for installing DeepDream on a Raspberry Pi 2.
 
+Autostart
+--------------------------------
+Open the file ~/.bashrc and add the lines
+
+    cd /home/ubuntu/deepdream/psycam
+    python psycam.py
+
+Then, turn off the Rapsberry Pi, Disconnect it from everything but the camera and attach a battery.
+The Raspberry Pi will now make Snapshots and convert the to DeepDream images with googles recipe.
+
 Usage
 -----------------------------------
 The script psycam.py is controlled via command-line parameters. They are listed with
