@@ -219,9 +219,6 @@ if __name__ == "__main__":
 
     # play with depth default and other types next
 
-    print 'Memory before:'
-    print psutil.virtual_memory()
-
     psycam = PsyCam(net=net)
 
     try:
