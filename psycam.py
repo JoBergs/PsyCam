@@ -1,7 +1,5 @@
 import argparse, os, sys, time
 
-import psutil
-
 from random import randint
 
 # imports and basic notebook setup
@@ -195,8 +193,6 @@ if __name__ == "__main__":
     net = create_net(os.path.join(models_base, 'bvlc_googlenet/bvlc_googlenet.caffemodel'))
 
     numbering = ['3a', '3b', '4a', '4b', '4c']
-    #test
-    numbering = ['4c']
     layer_types = ['1x1', '3x3', '5x5', 'output', '5x5_reduce', '3x3_reduce']
 
     l_index = args.depth - 1
@@ -229,8 +225,8 @@ if __name__ == "__main__":
     psycam = PsyCam(net=net)
 
     try:
-        #while True:
-        for layer_type in layer_types:
+        while True:
+        #for layer_type in layer_types:
 
             source_path = make_snapshot()
 
@@ -248,14 +244,14 @@ if __name__ == "__main__":
 
             # it seems as if o = 9 doesn't work, too; verify after reboot
                
-            #layer = 'inception_' + numbering[l_index] + '/' + layer_types[l_type]
-            layer = 'inception_' + numbering[l_index] + '/' + layer_type
+            layer = 'inception_' + numbering[l_index] + '/' + layer_types[l_type]
+            #layer = 'inception_' + numbering[l_index] + '/' + layer_type
 
             print 'INFO: '
             print 'octave: ' + str(octave)
             print 'layer: ' + str(layer)  + ' ' +    numbering[l_index]        
-            #print 'layer type: ' + str(l_type)  + ' ' +    layer_types[l_type]   
-            print 'layer type: ' + str(l_type)  + ' ' +    layer_type 
+            print 'layer type: ' + str(l_type)  + ' ' +    layer_types[l_type]   
+            #print 'layer type: ' + str(l_type)  + ' ' +    layer_type 
 
             print 'starting dream'
             # create psycam only with net;
@@ -266,9 +262,6 @@ if __name__ == "__main__":
             psycam.iterated_dream(source_path=source_path, 
                                                     end=layer, octaves=octave)
             time.sleep(1)
-
-            print 'Memory after:'
-            print psutil.virtual_memory()
 
             if args.snapshot == True:
                 break
