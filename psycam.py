@@ -2,9 +2,6 @@ import argparse, os, sys, time
 
 from random import randint
 
-# imports and basic notebook setup
-import os
-
 from cStringIO import StringIO
 import numpy as np
 import scipy.ndimage as nd
@@ -218,7 +215,6 @@ if __name__ == "__main__":
                 l_type = randint(0, len(layer_types)-1)
                
             layer = 'inception_' + numbering[l_index] + '/' + layer_types[l_type]
-            print layer
 
             psycam.iterated_dream(source_path=source_path, 
                                                     end=layer, octaves=octave)

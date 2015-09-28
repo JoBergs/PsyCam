@@ -32,11 +32,11 @@ Start PsyCam set layer depth, type and network octave manually:
 
     $python psycam.py -d 2 -t 1 -o 6
 
-Beware of 'dem Critters!
+Beware of the Critters!
 
 Output filename
 --------------------------------
 The output filename will be the higest 5-digit integer number in ./dreams which
-is not occupied already, e.g. "00023.jpg".
+is not occupied already, e.g. "00023.jpg". The Snapshot will be stored with the same[EDIT]
 
 * [Johannes Bergs](mailto:jo@knight-of-pi.org)
