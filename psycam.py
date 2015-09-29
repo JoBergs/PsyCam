@@ -182,6 +182,10 @@ def make_snapshot():
     del picamera
     return source_path
 
+def clean_directory():
+    os.remove("dreams/*.jpg")
+    os.remove("snapshots/*.jpg")
+
 if __name__ == "__main__":
 
     args = parse_arguments(sys.argv[1:])
@@ -201,6 +205,12 @@ if __name__ == "__main__":
     # why does the net factory for other models crash?
     # could the RAM be cleaned, garbage collected or s.t. after every run?
     # create net only when required;
+
+    # BACKUP old snapshots and dirs
+    # just create new dir named date
+    #   (if exists, store it with daytime incl minutes
+
+    clean_directory()
 
     psycam = PsyCam(net=net)
 
