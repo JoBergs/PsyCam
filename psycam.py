@@ -183,8 +183,7 @@ def make_snapshot():
     return source_path
 
 def clean_directory():
-    os.remove("dreams/*.jpg")
-    os.remove("snapshots/*.jpg")
+    [os.remove(f) for f in os.listdir('dreams').extend(os.listdir('snapshots'))]
 
 if __name__ == "__main__":
 
