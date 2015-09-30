@@ -1,4 +1,4 @@
-import argparse, os, sys, time
+import argparse, datetime, os, sys, time
 
 from random import randint
 
@@ -180,14 +180,23 @@ def make_snapshot():
     del picamera
     return source_path
 
+'''
 def store_images(directory):
+    
+    os.rename(directory, directory + '_' + now.replace(' ','-'))
     # extend directory timestamp
+'''
 
 def preprocess():
-    # check if dreams and snapshots exits;
-    # if so, rename to timestamp
-    # if not, create
-    [store_images(directory) for directory in ['dreams', 'snapshots'] if os.path.isdir(directory)]
+    ''' If the dreams and snapshots directories exit, move them to
+        dreams_DATE. Create empty directories then. '''
+
+    now = datetime.datetime.ctime()
+
+    for directory in ['dreams', 'snapshots']:
+        if os.path.isdir(directory):
+            os.rename(directory, directory + '_' + now.replace(' ','-'))
+        os.mkdir(directory)
 
     #[os.remove('dreams/' + f) for f in os.listdir('dreams') if f.endswith('.jpg')]
     #[os.remove('snapshots/' + f) for f in os.listdir('snapshots') if f.endswith('.jpg')]
