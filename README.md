@@ -38,6 +38,10 @@ Start PsyCam with randomized layer and octave:
 
     $python psycam.py -r
 
+Make just a single snapshot/dream:
+
+    $python psycam.py -s
+
 Start PsyCam set layer depth, type and network octave manually:
 
     $python psycam.py -d 2 -t 1 -o 6
@@ -48,6 +52,6 @@ Output filename
 --------------------------------
 The output filename will be the higest 5-digit integer number in ./dreams which
 is not occupied already, e.g. "00023.jpg". The Snapshot will be stored with the same Format but in
-./snaphots. To synchonize the filename, empty both directories with rm ./dreams/*.jpg.s
+./snaphots. Old dreams and snapshots are stored after starting PsyCam with a timestamp.
 
 * [Johannes Bergs](mailto:jo@knight-of-pi.org)

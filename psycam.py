@@ -144,10 +144,9 @@ def parse_arguments(sysargs):
         See the original Googleresearch blog post
         http://googleresearch.blogspot.ch/2015/06/inceptionism-going-deeper-into-neural.html
         for more information or follow this
-        http://www.knight-of-pi.org/installing-the-google-deepdream-software/
-        tutorial for installing DeepDream on Ubuntu.
-        Try guided dreams with the options -g FILE and -d 2 or shallow dreams
-        with the options -d 2 -t 5.'''
+        http://www.knight-of-pi.org/psycam-a-raspberry-pi-deepdream-surveilance-camera/
+        tutorial for installing PsyCam on a Raspberry Pi.
+        Try random surveilance with python psycam.py -r.'''
 
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument('-d', '--depth', nargs='?', metavar='int', type=int,
@@ -180,13 +179,6 @@ def make_snapshot():
     del picamera
     return source_path
 
-'''
-def store_images(directory):
-    
-    os.rename(directory, directory + '_' + now.replace(' ','-'))
-    # extend directory timestamp
-'''
-
 def store_images():
     ''' If the dreams and snapshots directories exit, move them to
         dreams_DATE. Create empty directories then. '''
@@ -197,9 +189,6 @@ def store_images():
         if os.path.isdir(directory):
             os.rename(directory, directory + '_' + now.replace(' ','-'))
         os.mkdir(directory)
-
-    #[os.remove('dreams/' + f) for f in os.listdir('dreams') if f.endswith('.jpg')]
-    #[os.remove('snapshots/' + f) for f in os.listdir('snapshots') if f.endswith('.jpg')]
 
 if __name__ == "__main__":
 
@@ -214,16 +203,6 @@ if __name__ == "__main__":
     l_index = args.depth - 1
     l_type = args.type - 1
     octave = args.octaves
-
-    # delete modules that are no more required
-    # update readme ect.
-    # why does the net factory for other models crash?
-    # could the RAM be cleaned, garbage collected or s.t. after every run?
-    # create net only when required;
-
-    # BACKUP old snapshots and dirs
-    # just create new dir named date
-    #   (if exists, store it with daytime incl minutes
 
     store_images()
 
