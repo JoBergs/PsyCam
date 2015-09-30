@@ -61,8 +61,7 @@ class PsyCam(object):
         self.objective = objective_L2
         self.octave_n = octaves
         self.end = end
-        print 'in iterated dream'
-        # OFF to hide net displaying(doesn't work...)
+
         #self.net.blobs.keys()
 
         frame = self.img
@@ -176,15 +175,22 @@ def make_snapshot():
     camera.resolution = (500, 280)
     source_path = get_output_path('snapshots')
     camera.capture(source_path)
-    print 'snapshot'
     camera.close()
     del camera
     del picamera
     return source_path
 
-def clean_directory():
-    [os.remove('dreams/' + f) for f in os.listdir('dreams') if f.endswith('.jpg')]
-    [os.remove('snapshots/' + f) for f in os.listdir('snapshots') if f.endswith('.jpg')]
+def store_images(directory):
+    # extend directory timestamp
+
+def preprocess():
+    # check if dreams and snapshots exits;
+    # if so, rename to timestamp
+    # if not, create
+    [store_images(directory) for directory in ['dreams', 'snapshots'] if os.path.isdir(directory)]
+
+    #[os.remove('dreams/' + f) for f in os.listdir('dreams') if f.endswith('.jpg')]
+    #[os.remove('snapshots/' + f) for f in os.listdir('snapshots') if f.endswith('.jpg')]
 
 if __name__ == "__main__":
 
@@ -210,7 +216,7 @@ if __name__ == "__main__":
     # just create new dir named date
     #   (if exists, store it with daytime incl minutes
 
-    clean_directory()
+    preprocess()
 
     psycam = PsyCam(net=net)
 
