@@ -191,7 +191,7 @@ def preprocess():
     ''' If the dreams and snapshots directories exit, move them to
         dreams_DATE. Create empty directories then. '''
 
-    now = datetime.datetime.ctime()
+    now = datetime.datetime.now().ctime()
 
     for directory in ['dreams', 'snapshots']:
         if os.path.isdir(directory):
