@@ -187,7 +187,7 @@ def store_images(directory):
     # extend directory timestamp
 '''
 
-def preprocess():
+def store_images():
     ''' If the dreams and snapshots directories exit, move them to
         dreams_DATE. Create empty directories then. '''
 
@@ -225,7 +225,7 @@ if __name__ == "__main__":
     # just create new dir named date
     #   (if exists, store it with daytime incl minutes
 
-    preprocess()
+    store_images()
 
     psycam = PsyCam(net=net)
 
