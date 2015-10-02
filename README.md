@@ -11,8 +11,8 @@ Installation
 -------------------------------
 
 The Installation of DeepDream is quite delicate; see this tutorial
-http://www.knight-of-pi.org/deepdreaming-on-a-raspberry-pi-2/
-for installing DeepDream on a Raspberry Pi 2.
+http://www.knight-of-pi.org/psycam-a-raspberry-pi-deepdream-surveilance-camera/
+for installing PsyCam on a Raspberry Pi 2.
 
 Autostart
 --------------------------------
