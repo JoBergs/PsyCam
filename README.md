@@ -1,6 +1,12 @@
 PsyCam
 ============
 
+* The installer is for the RPi, but may work on a bigger machine, too.
+
+* The installation takes many hours.
+
+* This installs everything required for the original Google ipython notebook for DeepDream
+
 PsyCam is a psychedelic surveilance camera for capturing the paranomal
 and metaphysic activities around us; that is, a Raspberry Pi with
 an camera module makes a snapshot and prozesses the image with Googles
