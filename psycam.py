@@ -24,7 +24,7 @@ def make_snapshot():
     del picamera
     return source_path
 
-# make this more robust
+# TODO: 'tis no good
 def store_images():
     try:
         if not os.path.isdir('./dreams'):
@@ -221,8 +221,9 @@ def start_dream(args):
             layer = 'inception_' + numbering[l_index] + '/' + layer_types[l_type]
 
 
-            # psycam.iterated_dream(source_path=source_path, 
-            #                                     end=layer, octaves=octave)
+            psycam.iterated_dream(source_path=source_path, 
+                                                end=layer, octaves=octave)
+            
             store_images()
             time.sleep(1)
 
