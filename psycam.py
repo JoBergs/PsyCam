@@ -24,7 +24,7 @@ def make_snapshot():
     del picamera
     return source_path
 
-def store_attachments():
+def store_images():
     try:
         if not os.path.isdir('./dreams'):
             os.mkdir('./dreams')
@@ -43,6 +43,39 @@ def store_attachments():
         os.rename("./new_original.jpg", "./last_original.jpg")
     except Exception as e:
         print("Can't store attachments!", e)
+
+def parse_arguments(sysargs):
+    """ Setup the command line options. """
+
+    description = '''psycam.py is a psycedelic surveilance camera using
+        Googles DeepDream algorithm. The DeepDream algorithm takes an image
+        as input and runs an overexpressed pattern recognition in form of
+        a convolutional neural network over it. 
+        See the original Googleresearch blog post
+        http://googleresearch.blogspot.ch/2015/06/inceptionism-going-deeper-into-neural.html
+        for more information or follow this
+        http://www.knight-of-pi.org/psycam-a-raspberry-pi-deepdream-surveilance-camera/
+        tutorial for installing PsyCam on a Raspberry Pi.
+        Try random surveilance with python psycam.py -r.'''
+
+    parser = argparse.ArgumentParser(description=description)
+    parser.add_argument('-d', '--depth', nargs='?', metavar='int', type=int,
+                                    choices=xrange(1, 5),  const=5, default=5,
+                                    help='Depth of the dream as an value between 1 and 10')
+    parser.add_argument('-t', '--type', nargs='?', metavar='int', type=int,
+                                    choices=xrange(1, 6),
+                                    const=4, default=4, help='Layer type as an value between 1 and 6')
+    parser.add_argument('-o', '--octaves', nargs='?', metavar='int', type=int,
+                                         choices=xrange(1, 10),
+                                         const=5, default=5, 
+                                         help='The number of scales the algorithm is applied to')
+    parser.add_argument('-r', '--random', action='store_true', 
+                                         help='Overwrite depth, layer type and octave with random values')
+
+    parser.add_argument('-s', '--snapshot', action='store_true', 
+                                         help='Make a single snapshot instead of running permanently')
+
+    return parser.parse_args(sysargs)
 
 def create_net(model_file):
     net_fn = os.path.join(os.path.split(model_file)[0], 'deploy.prototxt')
@@ -156,6 +189,7 @@ class PsyCam(object):
         # returning the resulting image
         return deprocess(self.net, src.data[0])
 
+'''
 # better: pass source as filename? -> YES
 # /home/pi/deepdream/caffe/models/bvlc_googlenet/bvlc_googlenet.caffemodel
 def random_dream():
@@ -189,9 +223,53 @@ def random_dream():
         import traceback
         print traceback.format_exc()
         print 'Quitting PsyCam'
+'''
+
+def start_dream(args):
+    models_base = '../caffe/models'
+    net = create_net(os.path.join(models_base, 'bvlc_googlenet/bvlc_googlenet.caffemodel'))
+
+    numbering = ['3a', '3b', '4a', '4b', '4c']
+    layer_types = ['1x1', '3x3', '5x5', 'output', '5x5_reduce', '3x3_reduce']
+
+    l_index = args.depth - 1
+    l_type = args.type - 1
+    octave = args.octaves
+
+    #store_images()
+
+    psycam = PsyCam(net=net)
+
+    try:
+        while True:
+            
+
+            source_path = make_snapshot()
+
+            # overwrite octaves and layer with random values
+            if args.random == True:
+                octave = randint(1, 9)
+                l_index = randint(0, len(numbering)-1)
+                l_type = randint(0, len(layer_types)-1)
+               
+            layer = 'inception_' + numbering[l_index] + '/' + layer_types[l_type]
+
+            psycam.iterated_dream(source_path=source_path, 
+                                                    end=layer, octaves=octave)
+            store_images()
+            time.sleep(1)
+
+            if args.snapshot == True:
+                break
+
+    except Exception, e:
+        import traceback
+        print traceback.format_exc()
+        print 'Quitting PsyCam'
 
 if __name__ == "__main__":
-    random_dream()
+    args = parse_arguments(sys.argv[1:])
+    start_dream(args)
 
 
 
