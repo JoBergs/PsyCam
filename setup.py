@@ -37,7 +37,7 @@ class CustomInstall(install):
 
 setup(
     name='PsyCam',        # Name of the PyPI-package.
-    version='1.02',             # Version number, update for new releases
+    version='1.3',             # Version number, update for new releases
     description='Install Google DeepDream on a Raspberry Pi with Raspbian Jessie',
     author='Johannes Bergs',
     author_email='jo@knight-of-pi.org',

@@ -1,4 +1,4 @@
-import datetime, os, sys, time, subprocess
+import argparse, datetime, os, sys, time
 
 from random import randint
 
@@ -8,41 +8,21 @@ import scipy.ndimage as nd
 import PIL.Image
 from google.protobuf import text_format
 
-# disable logging before net creation
-os.environ["GLOG_minloglevel"] = "2"
 import caffe
 
-def make_snapshot():    
-    import picamera
+def get_output_path(base_dir):
+    """ Create an output filename: look into folder dreams,
+        return lowest INTEGER.jpg with leading zeros, e.g. 00020.jpg """
+    # faster with sort
 
-    camera = picamera.PiCamera()
-    camera.resolution = (500, 280)
-    source_path = './new_original.jpg'
-    camera.capture(source_path)
-    camera.close()
-    del camera
-    del picamera
-    return source_path
+    index=0
+    output_file = os.path.join(base_dir, "%06d.jpg"%index)
 
-def store_attachments():
-    try:
-        if not os.path.isdir('./dreams'):
-            os.mkdir('./dreams')
+    while os.path.exists(output_file):
+        index += 1
+        output_file = os.path.join(base_dir, "%06d.jpg"%index)
 
-        now = datetime.datetime.now().ctime()
-        timestamp = '_'.join(now.split()[:-1])
-
-        print("stored photo at ", timestamp)
-
-        # stability: only store old dreams if new arrived
-        if os.path.isfile('./new_dream.jpg'):
-            os.rename("./last_dream.jpg", "./dreams/dream_" + timestamp + '.jpg')
-            os.rename("./last_original.jpg", "./dreams/original_" + timestamp + '.jpg')
-
-        os.rename("./new_dream.jpg", "./last_dream.jpg")
-        os.rename("./new_original.jpg", "./last_original.jpg")
-    except Exception as e:
-        print("Can't store attachments!", e)
+    return output_file
 
 def create_net(model_file):
     net_fn = os.path.join(os.path.split(model_file)[0], 'deploy.prototxt')
@@ -53,17 +33,12 @@ def create_net(model_file):
     model = caffe.io.caffe_pb2.NetParameter()
     text_format.Merge(open(net_fn).read(), model)
     model.force_backward = True
-
-
-    # ONLY DO THIS WHEN THE FILE DOES NOT EXIST! TEST THAT
     open('tmp.prototxt', 'w').write(str(model))
 
-    # probably mean needs to be CHANGED FOR OTHER NETS
     net = caffe.Classifier('tmp.prototxt', param_fn,
                            mean = np.float32([104.0, 116.0, 122.0]), # ImageNet mean, training set dependent
                            channel_swap = (2,1,0)) # the reference model has channels in BGR order instead of RGB
     return net
-
 
 # a couple of utility functions for converting to and from Caffe's input image layout
 def preprocess(net, img):
@@ -87,6 +62,8 @@ class PsyCam(object):
         self.octave_n = octaves
         self.end = end
 
+        #self.net.blobs.keys()
+
         frame = self.img
 
         h, w = frame.shape[:2]
@@ -97,7 +74,7 @@ class PsyCam(object):
         else:            
             frame = self.deepdream(frame, octave_n=self.octave_n)
 
-        PIL.Image.fromarray(np.uint8(frame)).save('./new_dream.jpg')
+        PIL.Image.fromarray(np.uint8(frame)).save(get_output_path('dreams/'))
         frame = nd.affine_transform(frame, [1-s,1-s,1], [h*s/2,w*s/2,0], order=1)
 
     def make_step(self, step_size=1.5, end='inception_4c/output', 
@@ -156,47 +133,109 @@ class PsyCam(object):
         # returning the resulting image
         return deprocess(self.net, src.data[0])
 
-# better: pass source as filename? -> YES
-# /home/pi/deepdream/caffe/models/bvlc_googlenet/bvlc_googlenet.caffemodel
-def random_dream():
-    models_base = '/home/pi/deepdream/caffe/models'
+
+def parse_arguments(sysargs):
+    """ Setup the command line options. """
+
+    description = '''psycam.py is a psycedelic surveilance camera using
+        Googles DeepDream algorithm. The DeepDream algorithm takes an image
+        as input and runs an overexpressed pattern recognition in form of
+        a convolutional neural network over it. 
+        See the original Googleresearch blog post
+        http://googleresearch.blogspot.ch/2015/06/inceptionism-going-deeper-into-neural.html
+        for more information or follow this
+        http://www.knight-of-pi.org/psycam-a-raspberry-pi-deepdream-surveilance-camera/
+        tutorial for installing PsyCam on a Raspberry Pi.
+        Try random surveilance with python psycam.py -r.'''
+
+    parser = argparse.ArgumentParser(description=description)
+    parser.add_argument('-d', '--depth', nargs='?', metavar='int', type=int,
+                                    choices=xrange(1, 5),  const=5, default=5,
+                                    help='Depth of the dream as an value between 1 and 10')
+    parser.add_argument('-t', '--type', nargs='?', metavar='int', type=int,
+                                    choices=xrange(1, 6),
+                                    const=4, default=4, help='Layer type as an value between 1 and 6')
+    parser.add_argument('-o', '--octaves', nargs='?', metavar='int', type=int,
+                                         choices=xrange(1, 10),
+                                         const=5, default=5, 
+                                         help='The number of scales the algorithm is applied to')
+    parser.add_argument('-r', '--random', action='store_true', 
+                                         help='Overwrite depth, layer type and octave with random values')
+
+    parser.add_argument('-s', '--snapshot', action='store_true', 
+                                         help='Make a single snapshot instead of running permanently')
+
+    return parser.parse_args(sysargs)
+
+
+def make_snapshot():    
+    import picamera
+    camera = picamera.PiCamera()
+    camera.resolution = (500, 280)
+    source_path = get_output_path('snapshots')
+    camera.capture(source_path)
+    camera.close()
+    del camera
+    del picamera
+    return source_path
+
+def store_images():
+    ''' If the dreams and snapshots directories exit, move them to
+        dreams_DATE. Create empty directories then. '''
+
+    now = datetime.datetime.now().ctime()
+
+    for directory in ['dreams', 'snapshots']:
+        if os.path.isdir(directory):
+            os.rename(directory, directory + '_' + now.replace(' ','-'))
+        os.mkdir(directory)
+
+if __name__ == "__main__":
+
+    args = parse_arguments(sys.argv[1:])
+
+    models_base = '../caffe/models'
     net = create_net(os.path.join(models_base, 'bvlc_googlenet/bvlc_googlenet.caffemodel'))
 
     numbering = ['3a', '3b', '4a', '4b', '4c']
     layer_types = ['1x1', '3x3', '5x5', 'output', '5x5_reduce', '3x3_reduce']
 
+    l_index = args.depth - 1
+    l_type = args.type - 1
+    octave = args.octaves
+
+    store_images()
+
     psycam = PsyCam(net=net)
 
-    numbering = ['3a', '3b', '4a', '4b', '4c']
-    layer_types = ['1x1', '3x3', '5x5', 'output', '5x5_reduce', '3x3_reduce']
-    octave = randint(1, 9)
-    l_index = randint(0, len(numbering)-1)
-    l_type = randint(0, len(layer_types)-1)
-
     try:
-        source_path = './old_original.jpg'
+        while True:
+            source_path = make_snapshot()
 
-        if os.path.isfile('./new_original.jpg'):
-            source_path = ('./new_original.jpg')   
+            # overwrite octaves and layer with random values
+            if args.random == True:
+                octave = randint(1, 9)
+                l_index = randint(0, len(numbering)-1)
+                l_type = randint(0, len(layer_types)-1)
+               
+            layer = 'inception_' + numbering[l_index] + '/' + layer_types[l_type]
 
-           
-        layer = 'inception_' + numbering[l_index] + '/' + layer_types[l_type]
+            psycam.iterated_dream(source_path=source_path, 
+                                                    end=layer, octaves=octave)
+            time.sleep(1)
 
-        psycam.iterated_dream(source_path=source_path, 
-                                                end=layer, octaves=octave)
+            if args.snapshot == True:
+                break
 
     except Exception, e:
         import traceback
         print traceback.format_exc()
         print 'Quitting PsyCam'
 
-if __name__ == "__main__":
-    random_dream()
-
-
 
     
 
     
     
+
 
