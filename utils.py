@@ -9,6 +9,7 @@ def execute_commands(path, commands):
     for command in commands:
         subprocess.call([command], shell=True)
 
+
 ########### camera ###########
 def activate_camera():
 
@@ -22,7 +23,7 @@ def activate_camera():
 
     subprocess.call(['sudo cp /boot/config.txt /boot/config.txt_BKP'], shell=True)
 
-    os.chmod("/home/pi/tmp", 0755)
+    #os.chmod("/home/pi/tmp", 0755)
 
     subprocess.call(['sudo cp /home/pi/tmp /boot/config.txt'], shell=True)
 ########### /camera ###########
@@ -61,6 +62,10 @@ bash_path = os.path.join(base_path, '.bashrc')
 
 def install_caffe():
 
+    # abort if caffe is already installed
+    if os.path.isdir(caffe_path):
+        return
+
     if not os.path.isdir(dd_path):
         os.mkdir(dd_path)
     os.chdir(dd_path)
@@ -95,6 +100,10 @@ protobuf_path = os.path.join(dd_path, 'protobuf-2.6.1')
 protobuf_python_path = os.path.join(protobuf_path, 'python')
 
 def install_protobuf():
+    # abort if protobuf is already installed
+    if os.path.isdir(protobuf_path):
+        return
+
     os.chdir(dd_path)
 
     with open(bash_path, "a") as f:
@@ -106,3 +115,13 @@ def install_protobuf():
     execute_commands(protobuf_path, make_protobuf)
     execute_commands(protobuf_python_path, python_protobuf)
 ########### /protobuf ###########
+
+psycam_path = os.path.join(dd_path, 'PsyCam')
+
+def install_psycam():
+    # abort if PsyCam is already installed
+    if os.path.isdir(psycam_path):
+        return
+
+    os.chdir(dd_path)
+    subprocess.call(['git clone https://github.com/JoBergs/PsyCam'], shell=True)

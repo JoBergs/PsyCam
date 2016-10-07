@@ -25,6 +25,7 @@ def do_after():
     install_apt_packages()
     install_caffe()
     install_protobuf()
+    install_pyscam()
     activate_camera()
     print('\n\nYou made it!\n\n')
 
@@ -36,10 +37,11 @@ class CustomInstall(install):
 
 setup(
     name='PsyCam',        # Name of the PyPI-package.
-    version='100',             # Version number, update for new releases
+    version='1.02',             # Version number, update for new releases
     description='Install Google DeepDream on a Raspberry Pi with Raspbian Jessie',
     author='Johannes Bergs',
     author_email='jo@knight-of-pi.org',
     install_requires=['pyzmq', 'jsonschema', 'pillow', 'numpy', 'scipy', 'ipython', 'jupyter', 'pyyaml'],
+    url='https://github.com/JoBergs/PsyCam',
     cmdclass={'install': CustomInstall}
 )
