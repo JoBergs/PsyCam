@@ -24,6 +24,7 @@ def make_snapshot():
     del picamera
     return source_path
 
+# make this more robust
 def store_images():
     try:
         if not os.path.isdir('./dreams'):
@@ -47,8 +48,8 @@ def store_images():
 def parse_arguments(sysargs):
     """ Setup the command line options. """
 
-    description = '''psycam.py is a psycedelic surveilance camera using
-        Googles DeepDream algorithm. The DeepDream algorithm takes an image
+    description = '''PsyCam is a psycedelic surveilance camera using the
+        Google DeepDream algorithm. The DeepDream algorithm takes an image
         as input and runs an overexpressed pattern recognition in form of
         a convolutional neural network over it. 
         See the original Googleresearch blog post
