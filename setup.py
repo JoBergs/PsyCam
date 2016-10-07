@@ -23,10 +23,10 @@ def do_before():
 
 def do_after():
     install_apt_packages()
-    install_caffe()
-    install_protobuf()
-    install_pyscam()
-    activate_camera()
+    #install_caffe()
+    #install_protobuf()
+    #install_pyscam()
+    #activate_camera()
     print('\n\nYou made it!\n\n')
 
 class CustomInstall(install):
