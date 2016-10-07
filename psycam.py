@@ -190,41 +190,6 @@ class PsyCam(object):
         # returning the resulting image
         return deprocess(self.net, src.data[0])
 
-'''
-# better: pass source as filename? -> YES
-# /home/pi/deepdream/caffe/models/bvlc_googlenet/bvlc_googlenet.caffemodel
-def random_dream():
-    models_base = '/home/pi/deepdream/caffe/models'
-    net = create_net(os.path.join(models_base, 'bvlc_googlenet/bvlc_googlenet.caffemodel'))
-
-    numbering = ['3a', '3b', '4a', '4b', '4c']
-    layer_types = ['1x1', '3x3', '5x5', 'output', '5x5_reduce', '3x3_reduce']
-
-    psycam = PsyCam(net=net)
-
-    numbering = ['3a', '3b', '4a', '4b', '4c']
-    layer_types = ['1x1', '3x3', '5x5', 'output', '5x5_reduce', '3x3_reduce']
-    octave = randint(1, 9)
-    l_index = randint(0, len(numbering)-1)
-    l_type = randint(0, len(layer_types)-1)
-
-    try:
-        source_path = './old_original.jpg'
-
-        if os.path.isfile('./new_original.jpg'):
-            source_path = ('./new_original.jpg')   
-
-           
-        layer = 'inception_' + numbering[l_index] + '/' + layer_types[l_type]
-
-        psycam.iterated_dream(source_path=source_path, 
-                                                end=layer, octaves=octave)
-
-    except Exception, e:
-        import traceback
-        print traceback.format_exc()
-        print 'Quitting PsyCam'
-'''
 
 def start_dream(args):
     models_base = '../caffe/models'
@@ -255,8 +220,9 @@ def start_dream(args):
                
             layer = 'inception_' + numbering[l_index] + '/' + layer_types[l_type]
 
-            psycam.iterated_dream(source_path=source_path, 
-                                                    end=layer, octaves=octave)
+            
+            # psycam.iterated_dream(source_path=source_path, 
+            #                                     end=layer, octaves=octave)
             store_images()
             time.sleep(1)
 
