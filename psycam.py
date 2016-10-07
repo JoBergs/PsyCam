@@ -35,13 +35,13 @@ def store_images():
 
         print("stored photo at ", timestamp)
 
-        # stability: only store old dreams if new arrived
         if os.path.isfile('./new_dream.jpg'):
-            os.rename("./last_dream.jpg", "./dreams/dream_" + timestamp + '.jpg')
-            os.rename("./last_original.jpg", "./dreams/original_" + timestamp + '.jpg')
+            if os.path.isfile('./last_dream.jpg'):
+                os.rename("./last_dream.jpg", "./dreams/dream_" + timestamp + '.jpg')
+                os.rename("./last_original.jpg", "./dreams/original_" + timestamp + '.jpg')
 
-        os.rename("./new_dream.jpg", "./last_dream.jpg")
-        os.rename("./new_original.jpg", "./last_original.jpg")
+            os.rename("./new_dream.jpg", "./last_dream.jpg")
+            os.rename("./new_original.jpg", "./last_original.jpg")
     except Exception as e:
         print("Can't store attachments!", e)
 
@@ -220,7 +220,7 @@ def start_dream(args):
                
             layer = 'inception_' + numbering[l_index] + '/' + layer_types[l_type]
 
-            
+
             # psycam.iterated_dream(source_path=source_path, 
             #                                     end=layer, octaves=octave)
             store_images()
