@@ -29,12 +29,14 @@ apt_packages = ["gfortran", "cython",
     "--no-install-recommends libboost-all-dev",
     "python-dev", "libgflags-dev", "libgoogle-glog-dev", "liblmdb-dev", "libatlas-base-dev", "python-skimage"]
 
-def install_apt_packages():
+def install_packages():
     subprocess.call(['sudo apt-get update && sudo apt-get -y upgrade'], shell=True)
 
     # TODO: fuse strings and pass to execute_commands
     for package in apt_packages:
         subprocess.call(['sudo apt-get install -y ' + package], shell=True)
+
+    subprocess.call(['sudo pip install -r requirements.txt'], shell=True)
 ########### /apt ###########
 
 ########### caffe ###########
@@ -123,11 +125,15 @@ def install_protobuf():
 
 if __name__ == "__main__":
     if len(sys.argv) == 2:
-        if sys.argv[1] == "caffe":
+        if sys.argv[1] == "packages":
+            install_packages()  
+        elif sys.argv[1] == "caffe":
             install_caffe()        
-        if sys.argv[1] == "protobuf":
-            install_protobuf()
+        elif sys.argv[1] == "protobuf":
+            install_protobuf()        
+        elif sys.argv[1] == "camera":
+            activate_camera()
 
     else:
-        print("What should be installed?")
-        print("Pass either 'caffe' or 'protobuf' as command line argument.")
+        print("""What should be installed?\nPass 'packages', 'caffe', 'protobuf'
+                    or 'camera' as command line argument.""")

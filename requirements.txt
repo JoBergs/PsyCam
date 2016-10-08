@@ -1,0 +1,8 @@
+pyzmq
+jsonschema
+pillow
+numpy
+ipython
+jupyter
+pyyaml
+scipy
