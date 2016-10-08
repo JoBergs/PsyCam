@@ -17,12 +17,16 @@ def make_snapshot():
 
     camera = picamera.PiCamera()
     camera.resolution = (500, 280)
-    source_path = './new_original.jpg'
-    camera.capture(source_path)
+
+    now = datetime.datetime.now().ctime()
+    timestamp = '_'.join(now.split()[:-1])
+
+    original_path = './dreams/original_' + timestamp + '.jpg'
+    camera.capture(original_path)
     camera.close()
     del camera
     del picamera
-    return source_path
+    return original_path
 
 # def make_snapshot():    
 #     import picamera
@@ -38,6 +42,7 @@ def make_snapshot():
 
 # TODO: 'tis no good
 # store snapshots and dreams directly in ./dreams
+'''
 def store_images():
     try:
         if not os.path.isdir('./dreams'):
@@ -57,6 +62,7 @@ def store_images():
             os.rename("./new_original.jpg", "./last_original.jpg")
     except Exception as e:
         print("Can't store attachments!", e)
+'''
 
 def parse_arguments(sysargs):
     """ Setup the command line options. """
@@ -128,8 +134,8 @@ class PsyCam(object):
     def __init__(self, net):        
         self.net = net
 
-    def iterated_dream(self, source_path, end, octaves):
-        self.img = np.float32(PIL.Image.open(source_path))
+    def iterated_dream(self, original_path, end, octaves):
+        self.img = np.float32(PIL.Image.open(original_path))
         self.objective = objective_L2
         self.octave_n = octaves
         self.end = end
@@ -143,6 +149,8 @@ class PsyCam(object):
             frame = self.deepdream(frame, end=self.end, octave_n=self.octave_n)
         else:            
             frame = self.deepdream(frame, octave_n=self.octave_n)
+
+        dream_path = original_path.replace('original', 'dream')
 
         PIL.Image.fromarray(np.uint8(frame)).save('./new_dream.jpg')
         frame = nd.affine_transform(frame, [1-s,1-s,1], [h*s/2,w*s/2,0], order=1)
@@ -223,7 +231,7 @@ def start_dream(args):
         while True:
             
 
-            source_path = make_snapshot()
+            original_path = make_snapshot()
 
             # overwrite octaves and layer with random values
             if args.random == True:
@@ -234,10 +242,10 @@ def start_dream(args):
             layer = 'inception_' + numbering[l_index] + '/' + layer_types[l_type]
 
 
-            psycam.iterated_dream(source_path=source_path, 
+            psycam.iterated_dream(original_path=original_path, 
                                                 end=layer, octaves=octave)
             
-            store_images()
+            #store_images()
             time.sleep(1)
 
             if args.snapshot == True:
