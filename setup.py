@@ -7,12 +7,19 @@ from setuptools.command.install import install
 from install_tools import install_apt_packages, activate_camera
 
 # NEWER:
+#   start from the command line, not from the Desktop (NECESSARY??? TEST THIS)
+#   INSTALL:
 #   mkdir deepdream && cd deepdream
 #   git clone https://github.com/JoBergs/PsyCam
 #   cd PsyCam
 #   sudo pip install .
 #   sudo python install_tools.py caffe
-#   ect.
+#   sudo python install_tools.py protobuf
+#   cd ~/deepdream/PsyCam
+#   python psycam.py -s -r
+#   WATCH:
+#   startx
+#   open /home/pi/deedream/PsyCam/dreams with a file browser
 
 
 # NEW: does this work???
@@ -32,20 +39,24 @@ from install_tools import install_apt_packages, activate_camera
 
 # FUSE THIS with the psycam repo
 
-def do_before():
-    print("\n\nInstalling DeepDream. No no he's not dead, he's, he's restin'!\n\n")    
-    # OFF FOR TESTING!
-    install_apt_packages()
+# def do_before():
+#     print("\n\nInstalling DeepDream. No no he's not dead, he's, he's restin'!\n\n")    
+#     # OFF FOR TESTING!
+#     install_apt_packages()
 
-def do_after():  
-    activate_camera()
-    print('\n\nInstalled dependencies...\n\n')
+# def do_after():  
+#     activate_camera()
+#     print('\n\nInstalled dependencies...\n\n')
 
 class CustomInstall(install):
     def run(self):
-        do_before()
+        print("\n\nInstalling DeepDream. No no he's not dead, he's, he's restin'!\n\n")    
+        # OFF FOR TESTING!
+        install_apt_packages()
+        print('\n\nInstall pip dependencies\n\n')
         install.run(self)
-        do_after()
+        activate_camera()
+        print('\n\nInstalled all dependencies...\n\n')
 
 # class InstallCaffe:
 #     def run(self):
