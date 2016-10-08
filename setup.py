@@ -50,6 +50,10 @@ from install_tools import install_apt_packages, activate_camera
 
 class CustomInstall(install):
     def run(self):
+        # THIS DOESN'T WORK:
+        #   scipy needs the apt installs
+        #   sudo pip install scypi <-- put this before caffe install
+
         print("\n\nInstalling DeepDream. No no he's not dead, he's, he's restin'!\n\n")    
         # OFF FOR TESTING!
         install_apt_packages()
@@ -78,7 +82,7 @@ setup(
     #scripts=['install_tools'],
     author_email='jo@knight-of-pi.org',
     # OFF FOR TESTING
-    install_requires=['pyzmq', 'jsonschema', 'pillow', 'numpy', 'scipy', 'ipython', 'jupyter', 'pyyaml'],
+    install_requires=['pyzmq', 'jsonschema', 'pillow', 'numpy', 'ipython', 'jupyter', 'pyyaml'],
     url='https://github.com/JoBergs/PsyCam',
     cmdclass={'install': CustomInstall}
     #cmdclass={'install': CustomInstall, 'caffe': InstallCaffe, 'protobuf': InstallProtobuf, 'psycam': InstallPsyCam}
