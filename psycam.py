@@ -28,41 +28,6 @@ def make_snapshot():
     del picamera
     return original_path
 
-# def make_snapshot():    
-#     import picamera
-
-#     camera = picamera.PiCamera()
-#     camera.resolution = (500, 280)
-#     source_path = './new_original.jpg'
-#     camera.capture(source_path)
-#     camera.close()
-#     del camera
-#     del picamera
-#     return source_path
-
-# TODO: 'tis no good
-# store snapshots and dreams directly in ./dreams
-'''
-def store_images():
-    try:
-        if not os.path.isdir('./dreams'):
-            os.mkdir('./dreams')
-
-        now = datetime.datetime.now().ctime()
-        timestamp = '_'.join(now.split()[:-1])
-
-        print("stored photo at ", timestamp)
-
-        if os.path.isfile('./new_dream.jpg'):
-            if os.path.isfile('./last_dream.jpg'):
-                os.rename("./last_dream.jpg", "./dreams/dream_" + timestamp + '.jpg')
-                os.rename("./last_original.jpg", "./dreams/original_" + timestamp + '.jpg')
-
-            os.rename("./new_dream.jpg", "./last_dream.jpg")
-            os.rename("./new_original.jpg", "./last_original.jpg")
-    except Exception as e:
-        print("Can't store attachments!", e)
-'''
 
 def parse_arguments(sysargs):
     """ Setup the command line options. """
@@ -223,13 +188,10 @@ def start_dream(args):
     l_type = args.type - 1
     octave = args.octaves
 
-    #store_images()
-
     psycam = PsyCam(net=net)
 
     try:
-        while True:
-            
+        while True:   
 
             original_path = make_snapshot()
 
@@ -245,7 +207,6 @@ def start_dream(args):
             psycam.iterated_dream(original_path=original_path, 
                                                 end=layer, octaves=octave)
             
-            #store_images()
             time.sleep(1)
 
             if args.snapshot == True:
