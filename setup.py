@@ -12,9 +12,10 @@ from install_tools import install_apt_packages, activate_camera
 #   mkdir deepdream && cd deepdream
 #   git clone https://github.com/JoBergs/PsyCam
 #   cd PsyCam
-#   sudo pip install .
+#   sudo python install_tools.py packages
 #   sudo python install_tools.py caffe
 #   sudo python install_tools.py protobuf
+#   sudo python install_tools.py camera
 #   cd ~/deepdream/PsyCam
 #   python psycam.py -s -r
 #   WATCH:
