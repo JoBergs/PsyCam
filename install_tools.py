@@ -22,9 +22,6 @@ def activate_camera():
         f.write(config)
 
     subprocess.call(['sudo cp /boot/config.txt /boot/config.txt_BKP'], shell=True)
-
-    #os.chmod("/home/pi/tmp", 0755)
-
     subprocess.call(['sudo cp /home/pi/tmp /boot/config.txt'], shell=True)
 ########### /camera ###########
 

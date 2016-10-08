@@ -4,7 +4,12 @@ from setuptools import setup
 
 from setuptools.command.install import install
 
-from utils import *
+from install_tools import *
+
+# NEW: does this work???
+# sudo pip install psycam
+# cd ~/deepdream
+# sudo pip caffe
 
 # Brute, i know.
 
@@ -23,11 +28,8 @@ def do_before():
     install_apt_packages()
 
 def do_after():  
-    #install_caffe()
-    #install_protobuf()
-    #install_pyscam()
-    #activate_camera()
-    print('\n\nYou made it!\n\n')
+    activate_camera()
+    print('\n\nInstalled dependencies...\n\n')
 
 class CustomInstall(install):
     def run(self):
@@ -35,13 +37,21 @@ class CustomInstall(install):
         install.run(self)
         do_after()
 
+class InstallProtobuf:
+    def run(self):
+        install_protobuf()
+
+class InstallPsyCam:
+    def run(self):
+        install_pyscam()
+
 setup(
-    name='PsyCam',        # Name of the PyPI-package.
-    version='1.3',             # Version number, update for new releases
+    name='PsyCam',
+    version='1.4',
     description='Install Google DeepDream on a Raspberry Pi with Raspbian Jessie',
     author='Johannes Bergs',
     author_email='jo@knight-of-pi.org',
     install_requires=['pyzmq', 'jsonschema', 'pillow', 'numpy', 'scipy', 'ipython', 'jupyter', 'pyyaml'],
     url='https://github.com/JoBergs/PsyCam',
-    cmdclass={'install': CustomInstall}
+    cmdclass={'install': CustomInstall, 'caffe': InstallCaffe, 'protobuf': InstallProtobuf, 'psycam': InstallPsyCam}
 )
