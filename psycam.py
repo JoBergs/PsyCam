@@ -24,6 +24,18 @@ def make_snapshot():
     del picamera
     return source_path
 
+# def make_snapshot():    
+#     import picamera
+
+#     camera = picamera.PiCamera()
+#     camera.resolution = (500, 280)
+#     source_path = './new_original.jpg'
+#     camera.capture(source_path)
+#     camera.close()
+#     del camera
+#     del picamera
+#     return source_path
+
 # TODO: 'tis no good
 # store snapshots and dreams directly in ./dreams
 def store_images():
