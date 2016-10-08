@@ -25,6 +25,7 @@ def make_snapshot():
     return source_path
 
 # TODO: 'tis no good
+# store snapshots and dreams directly in ./dreams
 def store_images():
     try:
         if not os.path.isdir('./dreams'):

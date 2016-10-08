@@ -20,9 +20,9 @@ from utils import *
 
 def do_before():
     print("\n\nInstalling DeepDream. No no he's not dead, he's, he's restin'!\n\n")    
-
-def do_after():
     install_apt_packages()
+
+def do_after():  
     #install_caffe()
     #install_protobuf()
     #install_pyscam()
