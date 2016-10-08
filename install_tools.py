@@ -1,6 +1,4 @@
-import subprocess
-
-import os, shutil
+import os, shutil, subprocess, sys
 
 
 def execute_commands(path, commands):
@@ -113,12 +111,23 @@ def install_protobuf():
     execute_commands(protobuf_python_path, python_protobuf)
 ########### /protobuf ###########
 
-psycam_path = os.path.join(dd_path, 'PsyCam')
+# psycam_path = os.path.join(dd_path, 'PsyCam')
 
-def install_psycam():
-    # abort if PsyCam is already installed
-    if os.path.isdir(psycam_path):
-        return
+# def install_psycam():
+#     # abort if PsyCam is already installed
+#     if os.path.isdir(psycam_path):
+#         return
 
-    os.chdir(dd_path)
-    subprocess.call(['git clone https://github.com/JoBergs/PsyCam'], shell=True)
+#     os.chdir(dd_path)
+#     subprocess.call(['git clone https://github.com/JoBergs/PsyCam'], shell=True)
+
+if __name__ == "__main__":
+    if len(sys.argv) == 2:
+        if sys.argv[1] == "caffe":
+            install_caffe()        
+        if sys.argv[1] == "protobuf":
+            install_protobuf()
+
+    else:
+        print("What should be installed?")
+        print("Pass either 'caffe' or 'protobuf' as command line argument.")
