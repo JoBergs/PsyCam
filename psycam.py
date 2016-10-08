@@ -152,7 +152,7 @@ class PsyCam(object):
 
         dream_path = original_path.replace('original', 'dream')
 
-        PIL.Image.fromarray(np.uint8(frame)).save('./new_dream.jpg')
+        PIL.Image.fromarray(np.uint8(frame)).save(dream_path)
         frame = nd.affine_transform(frame, [1-s,1-s,1], [h*s/2,w*s/2,0], order=1)
 
     def make_step(self, step_size=1.5, end='inception_4c/output', 
