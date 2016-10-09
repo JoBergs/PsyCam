@@ -108,7 +108,7 @@ def install_protobuf():
 
     subprocess.call(['cd protobuf-2.6.1'], shell=True)
 
-    execute_commands(download_protobuf)
+    execute_commands('.', download_protobuf)
     execute_commands(protobuf_path, make_protobuf)
     execute_commands(protobuf_python_path, python_protobuf)
 ########### /protobuf ###########
