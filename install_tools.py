@@ -113,16 +113,6 @@ def install_protobuf():
     execute_commands(protobuf_python_path, python_protobuf)
 ########### /protobuf ###########
 
-# psycam_path = os.path.join(dd_path, 'PsyCam')
-
-# def install_psycam():
-#     # abort if PsyCam is already installed
-#     if os.path.isdir(psycam_path):
-#         return
-
-#     os.chdir(dd_path)
-#     subprocess.call(['git clone https://github.com/JoBergs/PsyCam'], shell=True)
-
 if __name__ == "__main__":
     if len(sys.argv) == 2:
         if sys.argv[1] == "packages":
