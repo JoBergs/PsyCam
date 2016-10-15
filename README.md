@@ -71,4 +71,5 @@ with the original photo and tagged with a timestamp.
 Have fun
 ---------------
 
-* [Johannes Bergs](mailto:jo@knight-of-pi.org)
+Author:
+[Johannes Bergs](mailto:jo@knight-of-pi.org)
