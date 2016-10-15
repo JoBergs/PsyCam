@@ -1,0 +1,15 @@
+* make image size input arguments with min and max values
+
+* make the installer compatible with other linux systems
+
+* make a minimised image and share it
+
+* software tests
+
+* improve the installer: warn for failed downloads (BVLC specifically)
+    (maybe host a copy of these files)
+
+* add other training data sets
+
+* make a best-of image gallery, invite users to post images (make a contest???)
+
