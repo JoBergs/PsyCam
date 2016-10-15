@@ -1,8 +1,0 @@
-pyzmq
-jsonschema
-pillow
-numpy
-scipy
-ipython
-jupyter
-pyyaml
