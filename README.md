@@ -25,7 +25,7 @@ Either follow the manual installation instructions at
 or perform the following steps on a Raspberry Pi with Raspbian Jessie 
 installed and the camera module being attached:
 
-    $ mkdir deepdream && cd deepdream
+    $ mkdir ~/deepdream && cd ~/deepdream
     $ git clone https://github.com/JoBergs/PsyCam
     $ cd PsyCam
     $ sudo python install_tools.py packages
