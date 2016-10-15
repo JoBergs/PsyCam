@@ -20,7 +20,7 @@ Either follow the manual installation instructions at
 
     http://www.knight-of-pi.org/deepdream-on-the-raspberry-pi-3-with-raspbian-jessie/
 
-or perform the following steps in on a Raspberry Pi with Raspbian Jessie 
+or perform the following steps on a Raspberry Pi with Raspbian Jessie 
 installed and the camera module being attached:
 
     $ mkdir deepdream && cd deepdream
@@ -66,7 +66,7 @@ The dreams are stored in
 with the original photo and tagged with a timestamp.
 
 
-Have fun!
-
+Have fun
+---------------
 
 * [Johannes Bergs](mailto:jo@knight-of-pi.org)
