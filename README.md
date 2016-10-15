@@ -1,7 +1,7 @@
 PsyCam
 ============
 
-![Alt text](sky_small.jpg?raw=true "DeepDream")
+![Alt text](sample_dream.jpg?raw=true "DeepDream")
 
 Google DeepDream
 -----------------------------
