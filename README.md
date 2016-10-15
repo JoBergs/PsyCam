@@ -1,6 +1,8 @@
 PsyCam
 ============
 
+![Alt text](sky_small.jpg?raw=true "DeepDream")
+
 Google DeepDream
 -----------------------------
 The Google DeepDream algorithm is a modified neural network. Instead of
