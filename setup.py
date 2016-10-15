@@ -7,20 +7,21 @@ from setuptools.command.install import install
 from install_tools import install_apt_packages, activate_camera
 
 # NEWER:
-#   start from the command line, not from the Desktop (NECESSARY??? TEST THIS)
-#   INSTALL:
-#   mkdir deepdream && cd deepdream
-#   git clone https://github.com/JoBergs/PsyCam
-#   cd PsyCam
-#   sudo python install_tools.py packages
-#   sudo python install_tools.py caffe
-#   sudo python install_tools.py protobuf
-#   sudo python install_tools.py camera
-#   cd ~/deepdream/PsyCam
-#   python psycam.py -s -r
-#   WATCH:
-#   startx
-#   open /home/pi/deedream/PsyCam/dreams with a file browser
+# start from the command line, not from the Desktop (NECESSARY??? TEST THIS)
+# INSTALL:
+# mkdir deepdream && cd deepdream
+# git clone https://github.com/JoBergs/PsyCam
+# cd PsyCam
+# sudo python install_tools.py packages
+# sudo python install_tools.py caffe
+# sudo python install_tools.py protobuf
+# sudo python install_tools.py camera
+# sudo reboot
+# cd ~/deepdream/PsyCam
+# python psycam.py -s -r
+# WATCH:
+# startx
+# open /home/pi/deedream/PsyCam/dreams with a file browser
 
 
 # NEW: does this work???
