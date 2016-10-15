@@ -56,9 +56,6 @@ Start PsyCam set layer depth, type and network octave manually:
 
     $python psycam.py -d 2 -t 1 -o 6
 
-Beware of the Critters!
-
-
 Output images
 --------------------------------
 
@@ -67,5 +64,9 @@ The dreams are stored in
     /home/pi/deepdream/PsyCam/dreams 
 
 with the original photo and tagged with a timestamp.
+
+
+Have fun!
+
 
 * [Johannes Bergs](mailto:jo@knight-of-pi.org)
