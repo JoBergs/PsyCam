@@ -144,4 +144,5 @@ if __name__ == "__main__":
 
     else:
         print("""What should be installed?\nPass 'packages', 'caffe', 'protobuf'
-                    or 'camera' as command line argument.""")
+                    or 'camera' as command line argument.
+                    Also, add a '-u' for installing DeepDream on Ubuntu.""")
