@@ -58,10 +58,8 @@ def parse_arguments(sysargs):
                                          help='The number of scales the algorithm is applied to')
     parser.add_argument('-r', '--random', action='store_true', 
                                          help='Overwrite depth, layer type and octave with random values')
-
     parser.add_argument('-s', '--snapshot', action='store_true', 
                                          help='Make a single snapshot instead of running permanently')
-
     parser.add_argument('-i', '--input', nargs='?', metavar='path', type=str,
                                     help='Use the path passed behind -i as source for the dream')
 
@@ -198,7 +196,11 @@ def start_dream(args):
     try:
         while True:   
 
-            original_path = make_snapshot()
+            # if there is a path to an image as input argument, use it
+            if args.input:
+                original_path = args.input
+            else:
+                original_path = make_snapshot()
 
             # overwrite octaves and layer with random values
             if args.random == True:
@@ -210,7 +212,7 @@ def start_dream(args):
 
 
             psycam.iterated_dream(original_path=original_path, 
-                                                end=layer, octaves=octave)
+                                                     end=layer, octaves=octave)
             
             time.sleep(1)
 
@@ -224,8 +226,7 @@ def start_dream(args):
 
 if __name__ == "__main__":
     args = parse_arguments(sys.argv[1:])
-    print args
-    #start_dream(args)
+    start_dream(args)
 
 
 
