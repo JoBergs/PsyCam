@@ -30,9 +30,9 @@ def make_snapshot():
 def add_timestamp(path):
     now = datetime.datetime.now().ctime()
     timestamp = '_'.join(now.split()[:-1])
-    new_path = path.replace('.jpg', '_' + timestamp + '.jpg')
+    stamped_path = path.replace('.jpg', '_' + timestamp + '.jpg')
 
-    return path
+    return stamped_path
 
 
 def parse_arguments(sysargs):
