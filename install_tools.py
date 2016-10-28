@@ -51,7 +51,7 @@ caffe_replace = (('# CPU_ONLY := 1', 'CPU_ONLY := 1'),
                          ('LIBRARY_DIRS := $(PYTHON_LIB) /usr/local/lib /usr/lib',
                          'LIBRARY_DIRS := $(PYTHON_LIB) /usr/local/lib /usr/lib /usr/lib/arm-linux-gnueabihf/hdf5/serial/'))
 
-base_path = '+'
+base_path = '~'
 dd_path = os.path.join(base_path, 'deepdream')
 caffe_path = os.path.join(dd_path, 'caffe')
 bash_path = os.path.join(base_path, '.bashrc')
