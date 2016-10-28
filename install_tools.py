@@ -3,7 +3,7 @@ import os, shutil, subprocess, sys
 HOME = os.path.expanduser("~")
 
 
-def execute_commands(path, commands, ubuntu):
+def execute_commands(path, commands, ubuntu=False):
     os.chdir(path)
 
     for command in commands:
@@ -36,7 +36,7 @@ apt_packages = ["gfortran", "cython",
     "--no-install-recommends libboost-all-dev",
     "python-dev", "libgflags-dev", "libgoogle-glog-dev", "liblmdb-dev", "libatlas-base-dev", "python-skimage"]
 
-def install_packages(ubuntu=False):
+def install_packages():
     subprocess.call(['sudo apt-get update && sudo apt-get -y upgrade'], shell=True)
 
     # TODO: fuse strings and pass to execute_commands
@@ -133,8 +133,9 @@ if __name__ == "__main__":
     if len(sys.argv) >= 2:
         if len(sys.argv) == 3 and sys.argv[2] in ['-u', '--ubuntu']:
             ubuntu = True
+        print "ubuntu"
         if sys.argv[1] == "packages":
-            install_packages(ubuntu)  
+            install_packages()  
         elif sys.argv[1] == "caffe":
             install_caffe(ubuntu)        
         elif sys.argv[1] == "protobuf":
