@@ -41,7 +41,9 @@ def parse_arguments(sysargs):
         for more information or follow this
         http://www.knight-of-pi.org/psycam-a-raspberry-pi-deepdream-surveilance-camera/
         tutorial for installing PsyCam on a Raspberry Pi.
-        Try random surveilance with python psycam.py -r.'''
+        Try random surveilance with python psycam.py -r.
+        For using this script on an ubuntu system (non-rpi) without camera, 
+        give the parameter -i and the dream source file (*.jpg).'''
 
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument('-d', '--depth', nargs='?', metavar='int', type=int,
@@ -59,6 +61,9 @@ def parse_arguments(sysargs):
 
     parser.add_argument('-s', '--snapshot', action='store_true', 
                                          help='Make a single snapshot instead of running permanently')
+
+    parser.add_argument('-i', '--input', nargs='1', type=str,
+                                    help='Use the path passed behind -i as source for the dream')
 
     return parser.parse_args(sysargs)
 
@@ -219,7 +224,8 @@ def start_dream(args):
 
 if __name__ == "__main__":
     args = parse_arguments(sys.argv[1:])
-    start_dream(args)
+    print args
+    #start_dream(args)
 
 
 
