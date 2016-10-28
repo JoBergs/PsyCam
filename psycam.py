@@ -62,7 +62,7 @@ def parse_arguments(sysargs):
     parser.add_argument('-s', '--snapshot', action='store_true', 
                                          help='Make a single snapshot instead of running permanently')
 
-    parser.add_argument('-i', '--input', nargs='1', type=str,
+    parser.add_argument('-i', '--input', nargs='1', metavar='str', type=str,
                                     help='Use the path passed behind -i as source for the dream')
 
     return parser.parse_args(sysargs)
