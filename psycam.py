@@ -21,12 +21,12 @@ def make_snapshot():
     now = datetime.datetime.now().ctime()
     timestamp = '_'.join(now.split()[:-1])
 
-    original_path = './dreams/original_' + timestamp + '.jpg'
-    camera.capture(original_path)
+     source_path = './dreams/original_' + timestamp + '.jpg'
+    camera.capture( source_path)
     camera.close()
     del camera
     del picamera
-    return original_path
+    return  source_path
 
 
 def parse_arguments(sysargs):
@@ -62,6 +62,11 @@ def parse_arguments(sysargs):
                                          help='Make a single snapshot instead of running permanently')
     parser.add_argument('-i', '--input', nargs='?', metavar='path', type=str,
                                     help='Use the path passed behind -i as source for the dream')
+    '''
+    parser.add_argument('-x', '--xwidth', nargs='?', metavar='int', type=int,
+                                    choices=xrange(1, 5),  const=5, default=5,
+                                    help='Depth of the dream as an value between 1 and 10')
+    '''
 
     return parser.parse_args(sysargs)
 
@@ -102,8 +107,8 @@ class PsyCam(object):
     def __init__(self, net):        
         self.net = net
 
-    def iterated_dream(self, original_path, end, octaves):
-        self.img = np.float32(PIL.Image.open(original_path))
+    def iterated_dream(self,  source_path, end, octaves):
+        self.img = np.float32(PIL.Image.open( source_path))
         self.objective = objective_L2
         self.octave_n = octaves
         self.end = end
@@ -118,7 +123,7 @@ class PsyCam(object):
         else:            
             frame = self.deepdream(frame, octave_n=self.octave_n)
 
-        dream_path = original_path.replace('original', 'dream')
+        dream_path =  source_path.replace('original', 'dream')
 
         PIL.Image.fromarray(np.uint8(frame)).save(dream_path)
         frame = nd.affine_transform(frame, [1-s,1-s,1], [h*s/2,w*s/2,0], order=1)
@@ -180,7 +185,7 @@ class PsyCam(object):
         return deprocess(self.net, src.data[0])
 
 
-def start_dream(args):
+def start_dream(args,  source_path):
     models_base = '../caffe/models'
     net = create_net(os.path.join(models_base, 'bvlc_googlenet/bvlc_googlenet.caffemodel'))
 
@@ -194,13 +199,7 @@ def start_dream(args):
     psycam = PsyCam(net=net)
 
     try:
-        while True:   
-
-            # if there is a path to an image as input argument, use it
-            if args.input:
-                original_path = args.input
-            else:
-                original_path = make_snapshot()
+        while True:                 
 
             # overwrite octaves and layer with random values
             if args.random == True:
@@ -211,7 +210,7 @@ def start_dream(args):
             layer = 'inception_' + numbering[l_index] + '/' + layer_types[l_type]
 
 
-            psycam.iterated_dream(original_path=original_path, 
+            psycam.iterated_dream( source_path= source_path, 
                                                      end=layer, octaves=octave)
             
             time.sleep(1)
@@ -226,7 +225,17 @@ def start_dream(args):
 
 if __name__ == "__main__":
     args = parse_arguments(sys.argv[1:])
-    start_dream(args)
+
+    # make the snapshot HERE!
+    # pass path as argument
+
+    # if there is a path to an image as input argument, use it
+    if args.input:
+        source_path = args.input
+    else:
+        #apply width and height here
+        source_path = make_snapshot()
+    start_dream(args, source_path)
 
 
 
