@@ -18,9 +18,6 @@ def make_snapshot():
     camera = picamera.PiCamera()
     camera.resolution = (500, 280)
 
-
-
-    #source_path = './dreams/photo_' + timestamp + '.jpg'
     source_path = add_timestamp('./dreams/photo.jpg')
 
     camera.capture(source_path)
@@ -207,8 +204,7 @@ def start_dream(args, source_path):
 
     psycam = PsyCam(net=net)
 
-    try:
-        #while True:                 
+    try:         
 
         # overwrite octaves and layer with random values
         if args.random == True:
@@ -224,9 +220,6 @@ def start_dream(args, source_path):
         
         time.sleep(1)
 
-            #if args.snapshot == True:
-            #   break
-
     except Exception, e:
         import traceback
         print(traceback.format_exc())
@@ -234,9 +227,6 @@ def start_dream(args, source_path):
 
 if __name__ == "__main__":
     args = parse_arguments(sys.argv[1:])
-
-    # make the snapshot HERE!
-    # pass path as argument
 
     while True:
         # if there is a path to an image as input argument, use it
