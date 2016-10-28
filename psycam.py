@@ -68,11 +68,9 @@ def parse_arguments(sysargs):
                                          help='Make a single snapshot instead of running permanently')
     parser.add_argument('-i', '--input', nargs='?', metavar='path', type=str,
                                     help='Use the path passed behind -i as source for the dream')
-    '''
-    parser.add_argument('-x', '--xwidth', nargs='?', metavar='int', type=int,
-                                    choices=xrange(1, 5),  const=5, default=5,
-                                    help='Depth of the dream as an value between 1 and 10')
-    '''
+    parser.add_argument('-s', '--size', nargs='2', metavar='int int', type=int,
+                                    help='Pass the image size for rpi camera snapshots as x y')
+    
 
     return parser.parse_args(sysargs)
 
@@ -227,6 +225,8 @@ def start_dream(args, source_path):
 
 if __name__ == "__main__":
     args = parse_arguments(sys.argv[1:])
+    import ipdb
+    ipdb.set_trace()
 
     while True:
         # if there is a path to an image as input argument, use it
