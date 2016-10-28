@@ -12,11 +12,12 @@ from google.protobuf import text_format
 os.environ["GLOG_minloglevel"] = "2"
 import caffe
 
-def make_snapshot():    
+def make_snapshot(size=[500, 280]):    
     import picamera
 
+    # prolly resolution can be passed as size
     camera = picamera.PiCamera()
-    camera.resolution = (500, 280)
+    camera.resolution = size
 
     source_path = add_timestamp('./dreams/photo.jpg')
 
@@ -68,7 +69,7 @@ def parse_arguments(sysargs):
                                          help='Make a single snapshot instead of running permanently')
     parser.add_argument('-i', '--input', nargs='?', metavar='path', type=str,
                                     help='Use the path passed behind -i as source for the dream')
-    parser.add_argument('-s', '--size', nargs=2, type=int, metavar='x y', 
+    parser.add_argument('-s', '--size', nargs=2, type=int, metavar='x y', default=[500, 280]
                                     help='Pass the image size for rpi camera snapshots as x y')
     
 
@@ -225,9 +226,9 @@ def start_dream(args, source_path):
 
 if __name__ == "__main__":
     args = parse_arguments(sys.argv[1:])
-    print args
-    import ipdb
-    ipdb.set_trace()
+    # print args
+    # import ipdb
+    # ipdb.set_trace()
 
     while True:
         # if there is a path to an image as input argument, use it
@@ -238,7 +239,7 @@ if __name__ == "__main__":
             shutil.copyfile(args.input, source_path)
         else:
             #apply width and height here
-            source_path = make_snapshot()
+            source_path = make_snapshot(args.size)
         start_dream(args, source_path)
 
         if args.continually:
