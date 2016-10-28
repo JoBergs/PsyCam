@@ -231,7 +231,10 @@ if __name__ == "__main__":
     while True:
         # if there is a path to an image as input argument, use it
         if args.input:
-            source_path = args.input
+            #source_path = args.input
+            # TOGGLE COMMENTING! this is just for generating cool images
+            source_path = add_timestamp(args.input)
+            shutil.copyfile(args.input, source_path)
         else:
             #apply width and height here
             source_path = make_snapshot()
