@@ -58,7 +58,7 @@ def parse_arguments(sysargs):
                                          help='The number of scales the algorithm is applied to')
     parser.add_argument('-r', '--random', action='store_true', 
                                          help='Overwrite depth, layer type and octave with random values')
-    parser.add_argument('-s', '--snapshot', action='store_true', 
+    parser.add_argument('-c', '--continually', action='store_false', 
                                          help='Make a single snapshot instead of running permanently')
     parser.add_argument('-i', '--input', nargs='?', metavar='path', type=str,
                                     help='Use the path passed behind -i as source for the dream')
@@ -199,24 +199,24 @@ def start_dream(args, source_path):
     psycam = PsyCam(net=net)
 
     try:
-        while True:                 
+        #while True:                 
 
-            # overwrite octaves and layer with random values
-            if args.random == True:
-                octave = randint(1, 9)
-                l_index = randint(0, len(numbering)-1)
-                l_type = randint(0, len(layer_types)-1)
-               
-            layer = 'inception_' + numbering[l_index] + '/' + layer_types[l_type]
+        # overwrite octaves and layer with random values
+        if args.random == True:
+            octave = randint(1, 9)
+            l_index = randint(0, len(numbering)-1)
+            l_type = randint(0, len(layer_types)-1)
+           
+        layer = 'inception_' + numbering[l_index] + '/' + layer_types[l_type]
 
 
-            psycam.iterated_dream(source_path=source_path, 
-                                                     end=layer, octaves=octave)
-            
-            time.sleep(1)
+        psycam.iterated_dream(source_path=source_path, 
+                                                 end=layer, octaves=octave)
+        
+        time.sleep(1)
 
-            if args.snapshot == True:
-                break
+            #if args.snapshot == True:
+            #   break
 
     except Exception, e:
         import traceback
@@ -229,13 +229,17 @@ if __name__ == "__main__":
     # make the snapshot HERE!
     # pass path as argument
 
-    # if there is a path to an image as input argument, use it
-    if args.input:
-        source_path = args.input
-    else:
-        #apply width and height here
-        source_path = make_snapshot()
-    start_dream(args, source_path)
+    while True:
+        # if there is a path to an image as input argument, use it
+        if args.input:
+            source_path = args.input
+        else:
+            #apply width and height here
+            source_path = make_snapshot()
+        start_dream(args, source_path)
+
+        if args.continually:
+            break
 
 
 
