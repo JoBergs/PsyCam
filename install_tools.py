@@ -134,6 +134,8 @@ if __name__ == "__main__":
         if len(sys.argv) == 3 and sys.argv[2] in ['-u', '--ubuntu']:
             ubuntu = True
         print "ubuntu"
+        print ubuntu
+        print sys.argv
         if sys.argv[1] == "packages":
             install_packages()  
         elif sys.argv[1] == "caffe":
