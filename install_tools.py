@@ -16,11 +16,11 @@ def activate_camera():
 
     config += "\nstart_x=1\ngpu_mem=128"
 
-    with open('/home/pi/tmp', "w") as f:
+    with open('~/tmp', "w") as f:
         f.write(config)
 
     subprocess.call(['sudo cp /boot/config.txt /boot/config.txt_BKP'], shell=True)
-    subprocess.call(['sudo cp /home/pi/tmp /boot/config.txt'], shell=True)
+    subprocess.call(['sudo cp ~/tmp /boot/config.txt'], shell=True)
 ########### /camera ###########
 
 ########### apt ###########
@@ -51,7 +51,7 @@ caffe_replace = (('# CPU_ONLY := 1', 'CPU_ONLY := 1'),
                          ('LIBRARY_DIRS := $(PYTHON_LIB) /usr/local/lib /usr/lib',
                          'LIBRARY_DIRS := $(PYTHON_LIB) /usr/local/lib /usr/lib /usr/lib/arm-linux-gnueabihf/hdf5/serial/'))
 
-base_path = '/home/pi'
+base_path = '+'
 dd_path = os.path.join(base_path, 'deepdream')
 caffe_path = os.path.join(dd_path, 'caffe')
 bash_path = os.path.join(base_path, '.bashrc')
@@ -84,7 +84,7 @@ def install_caffe():
     execute_commands('.', caffe_commands)
 
     with open(bash_path, "a") as f:
-        f.write("export PYTHONPATH=/home/pi/deepdream/caffe/python:$PYTHONPATH")
+        f.write("export PYTHONPATH=~/deepdream/caffe/python:$PYTHONPATH")
 ########### /caffe ###########
     
 ########### protobuf ###########
