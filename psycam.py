@@ -21,7 +21,7 @@ def make_snapshot():
     now = datetime.datetime.now().ctime()
     timestamp = '_'.join(now.split()[:-1])
 
-    source_path = './dreams/original_' + timestamp + '.jpg'
+    source_path = './dreams/photo_' + timestamp + '.jpg'
     camera.capture(source_path)
     camera.close()
     del camera
@@ -123,7 +123,7 @@ class PsyCam(object):
         else:            
             frame = self.deepdream(frame, octave_n=self.octave_n)
 
-        dream_path = source_path.replace('original', 'dream')
+        dream_path = source_path.replace('.jpg', '_dream.jpg')
 
         PIL.Image.fromarray(np.uint8(frame)).save(dream_path)
         frame = nd.affine_transform(frame, [1-s,1-s,1], [h*s/2,w*s/2,0], order=1)
@@ -152,7 +152,7 @@ class PsyCam(object):
             src.data[:] = np.clip(src.data, -bias, 255-bias)  
 
     def deepdream(self, base_img, iter_n=10, octave_n=4, octave_scale=1.4, 
-                  end='inception_4c/output', clip=True, **step_params):
+                              end='inception_4c/output', clip=True, **step_params):
         # prepare base images for all octaves
         octaves = [preprocess(self.net, base_img)]
         for i in xrange(octave_n-1):
