@@ -69,7 +69,7 @@ def parse_arguments(sysargs):
                                          help='Make a single snapshot instead of running permanently')
     parser.add_argument('-i', '--input', nargs='?', metavar='path', type=str,
                                     help='Use the path passed behind -i as source for the dream')
-    parser.add_argument('-s', '--size', nargs=2, type=int, metavar='x y', default=[500, 280]
+    parser.add_argument('-s', '--size', nargs=2, type=int, metavar='x y', default=[500, 280],
                                     help='Pass the image size for rpi camera snapshots as x y')
     
 
