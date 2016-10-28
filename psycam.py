@@ -172,7 +172,7 @@ class PsyCam(object):
                 if not clip: # adjust image contrast if clipping is disabled
                     vis = vis*(255.0/np.percentile(vis, 99.98))
                 # is octave, i the depth?
-                print octave, i, end, vis.shape
+                print(octave, i, end, vis.shape)
                 
             # extract details produced on the current octave
             detail = src.data[0]-octave_base
@@ -221,8 +221,8 @@ def start_dream(args):
 
     except Exception, e:
         import traceback
-        print traceback.format_exc()
-        print 'Quitting PsyCam'
+        print(traceback.format_exc())
+        print('Quitting PsyCam')
 
 if __name__ == "__main__":
     args = parse_arguments(sys.argv[1:])
