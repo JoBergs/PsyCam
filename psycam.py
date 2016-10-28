@@ -28,8 +28,6 @@ def make_snapshot():
 
 
 def add_timestamp(path):
-    import ipdb
-    ipdb.set_trace()
     now = datetime.datetime.now().ctime()
     timestamp = '_'.join(now.split()[:-1])
     stamped_path = path.replace('.jpg', '_' + timestamp + '.jpg')
