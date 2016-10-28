@@ -18,15 +18,24 @@ def make_snapshot():
     camera = picamera.PiCamera()
     camera.resolution = (500, 280)
 
-    now = datetime.datetime.now().ctime()
-    timestamp = '_'.join(now.split()[:-1])
 
-    source_path = './dreams/photo_' + timestamp + '.jpg'
+
+    #source_path = './dreams/photo_' + timestamp + '.jpg'
+    source_path = add_timestamp('./dreams/photo.jpg')
+
     camera.capture(source_path)
     camera.close()
     del camera
     del picamera
     return source_path
+
+
+def add_timestamp(path):
+    now = datetime.datetime.now().ctime()
+    timestamp = '_'.join(now.split()[:-1])
+    new_path = path.replace('.jpg', '_' + timestamp + '.jpg')
+
+    return path
 
 
 def parse_arguments(sysargs):
