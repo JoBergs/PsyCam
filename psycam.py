@@ -21,12 +21,12 @@ def make_snapshot():
     now = datetime.datetime.now().ctime()
     timestamp = '_'.join(now.split()[:-1])
 
-     source_path = './dreams/original_' + timestamp + '.jpg'
-    camera.capture( source_path)
+    source_path = './dreams/original_' + timestamp + '.jpg'
+    camera.capture(source_path)
     camera.close()
     del camera
     del picamera
-    return  source_path
+    return source_path
 
 
 def parse_arguments(sysargs):
@@ -107,8 +107,8 @@ class PsyCam(object):
     def __init__(self, net):        
         self.net = net
 
-    def iterated_dream(self,  source_path, end, octaves):
-        self.img = np.float32(PIL.Image.open( source_path))
+    def iterated_dream(self, source_path, end, octaves):
+        self.img = np.float32(PIL.Image.open(source_path))
         self.objective = objective_L2
         self.octave_n = octaves
         self.end = end
@@ -123,7 +123,7 @@ class PsyCam(object):
         else:            
             frame = self.deepdream(frame, octave_n=self.octave_n)
 
-        dream_path =  source_path.replace('original', 'dream')
+        dream_path = source_path.replace('original', 'dream')
 
         PIL.Image.fromarray(np.uint8(frame)).save(dream_path)
         frame = nd.affine_transform(frame, [1-s,1-s,1], [h*s/2,w*s/2,0], order=1)
@@ -185,7 +185,7 @@ class PsyCam(object):
         return deprocess(self.net, src.data[0])
 
 
-def start_dream(args,  source_path):
+def start_dream(args, source_path):
     models_base = '../caffe/models'
     net = create_net(os.path.join(models_base, 'bvlc_googlenet/bvlc_googlenet.caffemodel'))
 
@@ -210,7 +210,7 @@ def start_dream(args,  source_path):
             layer = 'inception_' + numbering[l_index] + '/' + layer_types[l_type]
 
 
-            psycam.iterated_dream( source_path= source_path, 
+            psycam.iterated_dream(source_path=source_path, 
                                                      end=layer, octaves=octave)
             
             time.sleep(1)
