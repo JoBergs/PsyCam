@@ -161,15 +161,12 @@ class PsyCam(object):
         # returning the resulting image
         return deprocess(self.net, src.data[0])
 
-
-def start_dream(args, source_path):
-    models_base = '../caffe/models'
-    net = create_net(os.path.join(models_base, 'bvlc_googlenet/bvlc_googlenet.caffemodel'))
+def get_net_parameters(args):
+    """ Process input arguments into layer descriptor and number of octaves. """
 
     layer_depths = ['3a', '3b', '4a', '4b', '4c', '4d', '4e', '5a', '5b']
     layer_types = ['1x1', '3x3', '5x5', 'output', '5x5_reduce', '3x3_reduce']
 
-    # move all of this in function preprocessing or something
     octave = randint(1, 9)
     l_depth = randint(0, len(layer_depths)-1)
     l_type = randint(0, len(layer_types)-1)
@@ -184,18 +181,25 @@ def start_dream(args, source_path):
     # when running DeepDream on the RPi, restrict layer depth to 5 = '4d':
     # higher values crash the RPi
     if detect_rpi:
-        l_depth = min(l_depth, 5)
-
-    
+        l_depth = min(l_depth, 5)    
            
     layer = 'inception_' + layer_depths[l_depth] + '/' + layer_types[l_type]
 
-    print('Image: ',  source_path, 'Layer: ', layer, 'Octave: ', octave)
+    print('\nLayer: ', layer, 'Octave: ', octave, '\n')
 
+    return layer, octave
+
+def start_dream(args, source_path):
+    """ Gather all parameters (source image, layer descriptor and octave),
+    create a net and start to dream. """
+
+    layer, octave = get_net_parameters()
+
+    models_base = '../caffe/models'
+    net = create_net(os.path.join(models_base, 'bvlc_googlenet/bvlc_googlenet.caffemodel'))
     psycam = PsyCam(net=net)
     psycam.iterated_dream(source_path=source_path, 
                                              end=layer, octaves=octave)
-
 
 
 def parse_arguments(sysargs):
@@ -234,7 +238,8 @@ def parse_arguments(sysargs):
 
     return parser.parse_args(sysargs)
 
-def handle_source_image(args):
+
+def get_source_image(args):
     """ Input processing: if a source image is supplied, make a time-stamped
     duplicate;  if no image is supplied, make a snapshot with the given format."""
 
@@ -244,14 +249,18 @@ def handle_source_image(args):
     else:
         source_path = make_snapshot(args.size)
 
+    print('\nBase image for the DeepDream: ', source_path, '\n')
+
     return source_path
+
 
 if __name__ == "__main__":
     try:
         args = parse_arguments(sys.argv[1:])
         while True:
 
-            source_path = handle_source_image(args)
+            # move the line below into start_dream
+            source_path = get_source_image(args)
             start_dream(args, source_path)
             time.sleep(1)
 
