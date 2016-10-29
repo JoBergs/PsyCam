@@ -171,6 +171,11 @@ def start_dream(args, source_path):
     if args.octaves:
         octave = args.octaves
 
+    # when running DeepDream on the RPi, restrict layer type to '4d':
+    # higher values crash the RPi
+    if not args.ubuntu:
+        l_type = min(l_type, 5)
+
     psycam = PsyCam(net=net)
 
     try:         
