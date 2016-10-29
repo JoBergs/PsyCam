@@ -164,6 +164,8 @@ class PsyCam(object):
 def get_net_parameters(args):
     """ Process input arguments into layer descriptor and number of octaves. """
 
+    # split off octave
+
     layer_depths = ['3a', '3b', '4a', '4b', '4c', '4d', '4e', '5a', '5b']
     layer_types = ['1x1', '3x3', '5x5', 'output', '5x5_reduce', '3x3_reduce']
 
@@ -189,11 +191,12 @@ def get_net_parameters(args):
 
     return layer, octave
 
-def start_dream(args, source_path):
+def start_dream(args):
     """ Gather all parameters (source image, layer descriptor and octave),
     create a net and start to dream. """
 
-    layer, octave = get_net_parameters()
+    source_path = get_source_image(args)
+    layer, octave = get_net_parameters(args)
 
     models_base = '../caffe/models'
     net = create_net(os.path.join(models_base, 'bvlc_googlenet/bvlc_googlenet.caffemodel'))
@@ -258,10 +261,7 @@ if __name__ == "__main__":
     try:
         args = parse_arguments(sys.argv[1:])
         while True:
-
-            # move the line below into start_dream
-            source_path = get_source_image(args)
-            start_dream(args, source_path)
+            start_dream(args)
             time.sleep(1)
 
             if not args.continually:
