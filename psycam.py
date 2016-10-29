@@ -16,8 +16,8 @@ def make_snapshot(size=[500, 280]):
     import picamera
 
     # prolly resolution can be passed as size
-    camera = picamera.PiCamera()
-    camera.resolution = size
+    camera = picamera.PiCamera(resolution=size)
+    #camera.resolution = size
 
     source_path = add_timestamp('./dreams/photo.jpg')
 
@@ -165,7 +165,6 @@ def start_dream(args, source_path):
     models_base = '../caffe/models'
     net = create_net(os.path.join(models_base, 'bvlc_googlenet/bvlc_googlenet.caffemodel'))
 
-    # deep layers may be too much for the RPi (cut indexing depending on --ubuntu flag)
     layer_depths = ['3a', '3b', '4a', '4b', '4c', '4d', '4e', '5a', '5b']
     layer_types = ['1x1', '3x3', '5x5', 'output', '5x5_reduce', '3x3_reduce']
 
@@ -181,7 +180,7 @@ def start_dream(args, source_path):
     if args.octaves:
         octave = args.octaves
 
-    # when running DeepDream on the RPi, restrict layer type to '4d':
+    # when running DeepDream on the RPi, restrict layer depth to 5 = '4d':
     # higher values crash the RPi
     if detect_rpi:
         print(l_depth)
