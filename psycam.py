@@ -152,6 +152,9 @@ class PsyCam(object):
 
 def detect_rpi():
     #   FILL WITH LOGIC
+    with open('/proc/cpuinfo', 'r') as f:
+        print(f.read())
+        
     return True
 
 
