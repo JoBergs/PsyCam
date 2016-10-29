@@ -3,7 +3,7 @@ import os, shutil, subprocess, sys
 HOME = os.path.expanduser("~")
 
 
-def execute_commands(path, commands, ubuntu):
+def execute_commands(path, commands, ubuntu=False):
     os.chdir(path)
 
     for command in commands:

@@ -1,4 +1,7 @@
-import argparse, datetime, os, sys, time, subprocess
+#!/usr/bin/python
+#encoding:utf-8
+
+import os, sys
 
 from random import randint
 
@@ -12,59 +15,13 @@ from google.protobuf import text_format
 os.environ["GLOG_minloglevel"] = "2"
 import caffe
 
-def make_snapshot():    
-    import picamera
+from utils import get_layer_descriptor, get_source_image, parse_arguments
 
-    camera = picamera.PiCamera()
-    camera.resolution = (500, 280)
-
-    now = datetime.datetime.now().ctime()
-    timestamp = '_'.join(now.split()[:-1])
-
-    original_path = './dreams/original_' + timestamp + '.jpg'
-    camera.capture(original_path)
-    camera.close()
-    del camera
-    del picamera
-    return original_path
-
-
-def parse_arguments(sysargs):
-    """ Setup the command line options. """
-
-    description = '''PsyCam is a psycedelic surveilance camera using the
-        Google DeepDream algorithm. The DeepDream algorithm takes an image
-        as input and runs an overexpressed pattern recognition in form of
-        a convolutional neural network over it. 
-        See the original Googleresearch blog post
-        http://googleresearch.blogspot.ch/2015/06/inceptionism-going-deeper-into-neural.html
-        for more information or follow this
-        http://www.knight-of-pi.org/psycam-a-raspberry-pi-deepdream-surveilance-camera/
-        tutorial for installing PsyCam on a Raspberry Pi.
-        Try random surveilance with python psycam.py -r.'''
-
-    parser = argparse.ArgumentParser(description=description)
-    parser.add_argument('-d', '--depth', nargs='?', metavar='int', type=int,
-                                    choices=xrange(1, 5),  const=5, default=5,
-                                    help='Depth of the dream as an value between 1 and 10')
-    parser.add_argument('-t', '--type', nargs='?', metavar='int', type=int,
-                                    choices=xrange(1, 6),
-                                    const=4, default=4, help='Layer type as an value between 1 and 6')
-    parser.add_argument('-o', '--octaves', nargs='?', metavar='int', type=int,
-                                         choices=xrange(1, 10),
-                                         const=5, default=5, 
-                                         help='The number of scales the algorithm is applied to')
-    parser.add_argument('-r', '--random', action='store_true', 
-                                         help='Overwrite depth, layer type and octave with random values')
-
-    parser.add_argument('-s', '--snapshot', action='store_true', 
-                                         help='Make a single snapshot instead of running permanently')
-
-    return parser.parse_args(sysargs)
 
 def create_net(model_file):
+    """ Create the neural network tmp.prototxt. """
+
     net_fn = os.path.join(os.path.split(model_file)[0], 'deploy.prototxt')
-    param_fn = model_file
 
     # Patching model to be able to compute gradients.
     # Note that you can also manually add "force_backward: true" line to "deploy.prototxt".
@@ -72,16 +29,16 @@ def create_net(model_file):
     text_format.Merge(open(net_fn).read(), model)
     model.force_backward = True
 
-
-    # ONLY DO THIS WHEN THE FILE DOES NOT EXIST! TEST THAT
     open('tmp.prototxt', 'w').write(str(model))
 
-    # probably mean needs to be CHANGED FOR OTHER NETS
-    net = caffe.Classifier('tmp.prototxt', param_fn,
+
+def load_net(model_file):
+    """ Load the neural network tmp.prototxt.  """
+
+    net = caffe.Classifier('tmp.prototxt', model_file,
                            mean = np.float32([104.0, 116.0, 122.0]), # ImageNet mean, training set dependent
                            channel_swap = (2,1,0)) # the reference model has channels in BGR order instead of RGB
     return net
-
 
 # a couple of utility functions for converting to and from Caffe's input image layout
 def preprocess(net, img):
@@ -99,11 +56,13 @@ class PsyCam(object):
     def __init__(self, net):        
         self.net = net
 
-    def iterated_dream(self, original_path, end, octaves):
-        self.img = np.float32(PIL.Image.open(original_path))
+    def iterated_dream(self, source_path, end, octaves):
+        self.img = np.float32(PIL.Image.open(source_path))
         self.objective = objective_L2
         self.octave_n = octaves
         self.end = end
+
+        # refactor this
 
         frame = self.img
 
@@ -115,7 +74,7 @@ class PsyCam(object):
         else:            
             frame = self.deepdream(frame, octave_n=self.octave_n)
 
-        dream_path = original_path.replace('original', 'dream')
+        dream_path = source_path.replace('.jpg', '_dream.jpg')
 
         PIL.Image.fromarray(np.uint8(frame)).save(dream_path)
         frame = nd.affine_transform(frame, [1-s,1-s,1], [h*s/2,w*s/2,0], order=1)
@@ -144,7 +103,8 @@ class PsyCam(object):
             src.data[:] = np.clip(src.data, -bias, 255-bias)  
 
     def deepdream(self, base_img, iter_n=10, octave_n=4, octave_scale=1.4, 
-                  end='inception_4c/output', clip=True, **step_params):
+                              end='inception_4c/output', clip=True, **step_params):
+
         # prepare base images for all octaves
         octaves = [preprocess(self.net, base_img)]
         for i in xrange(octave_n-1):
@@ -168,8 +128,8 @@ class PsyCam(object):
                 vis = deprocess(self.net, src.data[0])
                 if not clip: # adjust image contrast if clipping is disabled
                     vis = vis*(255.0/np.percentile(vis, 99.98))
-                # is octave, i the depth?
-                print octave, i, end, vis.shape
+                
+                print(octave, i, end, vis.shape)
                 
             # extract details produced on the current octave
             detail = src.data[0]-octave_base
@@ -178,53 +138,33 @@ class PsyCam(object):
 
 
 def start_dream(args):
-    models_base = '../caffe/models'
-    net = create_net(os.path.join(models_base, 'bvlc_googlenet/bvlc_googlenet.caffemodel'))
+    """ Gather all parameters (source image, layer descriptor and octave),
+    create a net and start to dream. """
 
-    numbering = ['3a', '3b', '4a', '4b', '4c']
-    layer_types = ['1x1', '3x3', '5x5', 'output', '5x5_reduce', '3x3_reduce']
+    source_path = get_source_image(args)
+    layer = get_layer_descriptor(args)
+    octave = (args.octaves if args.octaves else randint(1, 9))
 
-    l_index = args.depth - 1
-    l_type = args.type - 1
-    octave = args.octaves
+    model_file = '../caffe/models/bvlc_googlenet/bvlc_googlenet.caffemodel'
+
+    if args.network:
+        create_net(model_file)
+    net = load_net(model_file)
 
     psycam = PsyCam(net=net)
-
-    try:
-        while True:   
-
-            original_path = make_snapshot()
-
-            # overwrite octaves and layer with random values
-            if args.random == True:
-                octave = randint(1, 9)
-                l_index = randint(0, len(numbering)-1)
-                l_type = randint(0, len(layer_types)-1)
-               
-            layer = 'inception_' + numbering[l_index] + '/' + layer_types[l_type]
-
-
-            psycam.iterated_dream(original_path=original_path, 
-                                                end=layer, octaves=octave)
-            
-            time.sleep(1)
-
-            if args.snapshot == True:
-                break
-
-    except Exception, e:
-        import traceback
-        print traceback.format_exc()
-        print 'Quitting PsyCam'
+    psycam.iterated_dream(source_path=source_path, 
+                                             end=layer, octaves=octave)    
 
 if __name__ == "__main__":
-    args = parse_arguments(sys.argv[1:])
-    start_dream(args)
+    try:
+        args = parse_arguments(sys.argv[1:])
+        while True:
+            start_dream(args)
 
+            if not args.continually:
+                break
 
-
-    
-
-    
-    
-
+    except Exception as e:
+        import traceback
+        print(traceback.format_exc())
+        print('Quitting PsyCam')
