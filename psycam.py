@@ -58,10 +58,9 @@ def parse_arguments(sysargs):
                                     help='Depth of the dream as an value between 1 and 10')
     parser.add_argument('-t', '--type', nargs='?', metavar='int', type=int,
                                     choices=xrange(1, 10),
-                                    const=4, default=4, help='Layer type as an value between 1 and 6')
+                                    help='Layer type as an value between 1 and 6')
     parser.add_argument('-o', '--octaves', nargs='?', metavar='int', type=int,
                                          choices=xrange(1, 10),
-                                         const=5, default=5, 
                                          help='The number of scales the algorithm is applied to')
     # parser.add_argument('-r', '--random', action='store_true', 
     #                                      help='Overwrite depth, layer type and octave with random values')
