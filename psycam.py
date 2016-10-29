@@ -102,6 +102,9 @@ class PsyCam(object):
         
         src = self.net.blobs['data']
         detail = np.zeros_like(octaves[-1]) # allocate image for network-produced details
+
+        print(enumerate(octaves[::-1]))
+
         for octave, octave_base in enumerate(octaves[::-1]):
             h, w = octave_base.shape[-2:]
             if octave > 0:
