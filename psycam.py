@@ -36,44 +36,6 @@ def add_timestamp(path):
     return stamped_path
 
 
-def parse_arguments(sysargs):
-    """ Setup the command line options. """
-
-    description = '''PsyCam is a psycedelic surveilance camera using the
-        Google DeepDream algorithm. The DeepDream algorithm takes an image
-        as input and runs an overexpressed pattern recognition in form of
-        a convolutional neural network over it. 
-        See the original Googleresearch blog post
-        http://googleresearch.blogspot.ch/2015/06/inceptionism-going-deeper-into-neural.html
-        for more information or follow this
-        http://www.knight-of-pi.org/psycam-a-raspberry-pi-deepdream-surveilance-camera/
-        tutorial for installing PsyCam on a Raspberry Pi.
-        Try random surveilance with python psycam.py -r.
-        For using this script on an ubuntu system (non-rpi) without camera, 
-        give the parameter -i and the dream source file (*.jpg).'''
-
-    parser = argparse.ArgumentParser(description=description)
-    parser.add_argument('-d', '--depth', nargs='?', metavar='int', type=int,
-                                    choices=xrange(1, 5), 
-                                    help='Depth of the dream as an value between 1 and 10')
-    parser.add_argument('-t', '--type', nargs='?', metavar='int', type=int,
-                                    choices=xrange(1, 10),
-                                    help='Layer type as an value between 1 and 6')
-    parser.add_argument('-o', '--octaves', nargs='?', metavar='int', type=int,
-                                         choices=xrange(1, 10),
-                                         help='The number of scales the algorithm is applied to')
-    # parser.add_argument('-r', '--random', action='store_true', 
-    #                                      help='Overwrite depth, layer type and octave with random values')
-    parser.add_argument('-c', '--continually', action='store_true', 
-                                         help='Run psycam in an endless loop')
-    parser.add_argument('-i', '--input', nargs='?', metavar='path', type=str,
-                                    help='Use the path passed behind -i as source for the dream')
-    parser.add_argument('-s', '--size', nargs=2, type=int, metavar='x y', default=[500, 280],
-                                    help='Pass the image size for rpi camera snapshots as x y')
-    
-
-    return parser.parse_args(sysargs)
-
 def create_net(model_file):
     net_fn = os.path.join(os.path.split(model_file)[0], 'deploy.prototxt')
     param_fn = model_file
@@ -228,9 +190,47 @@ def start_dream(args, source_path):
         print(traceback.format_exc())
         print('Quitting PsyCam')
 
+def parse_arguments(sysargs):
+    """ Setup the command line options. """
+
+    description = '''PsyCam is a psycedelic surveilance camera using the
+        Google DeepDream algorithm. The DeepDream algorithm takes an image
+        as input and runs an overexpressed pattern recognition in form of
+        a convolutional neural network over it. 
+        See the original Googleresearch blog post
+        http://googleresearch.blogspot.ch/2015/06/inceptionism-going-deeper-into-neural.html
+        for more information or follow this
+        http://www.knight-of-pi.org/psycam-a-raspberry-pi-deepdream-surveilance-camera/
+        tutorial for installing PsyCam on a Raspberry Pi.
+        Try random surveilance with python psycam.py -r.
+        For using this script on an ubuntu system (non-rpi) without camera, 
+        give the parameter -i and the dream source file (*.jpg).'''
+
+    parser = argparse.ArgumentParser(description=description)
+    parser.add_argument('-d', '--depth', nargs='?', metavar='int', type=int,
+                                    choices=xrange(1, 9), 
+                                    help='Depth of the dream as an value between 1 and 10')
+    parser.add_argument('-t', '--type', nargs='?', metavar='int', type=int,
+                                    choices=xrange(1, 6),
+                                    help='Layer type as an value between 1 and 6')
+    parser.add_argument('-o', '--octaves', nargs='?', metavar='int', type=int,
+                                         choices=xrange(1, 12),
+                                         help='The number of scales the algorithm is applied to')
+    # parser.add_argument('-r', '--random', action='store_true', 
+    #                                      help='Overwrite depth, layer type and octave with random values')
+    parser.add_argument('-c', '--continually', action='store_true', 
+                                         help='Run psycam in an endless loop')
+    parser.add_argument('-i', '--input', nargs='?', metavar='path', type=str,
+                                    help='Use the path passed behind -i as source for the dream')
+    parser.add_argument('-s', '--size', nargs=2, type=int, metavar='width height', default=[500, 280],
+                                    help='Pass the image size for rpi camera snapshots as x y')
+    
+
+    return parser.parse_args(sysargs)
+
 if __name__ == "__main__":
     args = parse_arguments(sys.argv[1:])
-    print args
+    print(args)
     # import ipdb
     # ipdb.set_trace()
 
