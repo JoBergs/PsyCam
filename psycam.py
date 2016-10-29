@@ -208,7 +208,7 @@ def parse_arguments(sysargs):
 
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument('-d', '--depth', nargs='?', metavar='int', type=int,
-                                    choices=xrange(1, 9), 
+                                    choices=xrange(1, 10), 
                                     help='Depth of the dream as an value between 1 and 10')
     parser.add_argument('-t', '--type', nargs='?', metavar='int', type=int,
                                     choices=xrange(1, 6),
