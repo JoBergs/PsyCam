@@ -130,7 +130,7 @@ class PsyCam(object):
 
     def deepdream(self, base_img, iter_n=10, octave_n=4, octave_scale=1.4, 
                               end='inception_4c/output', clip=True, **step_params):
-    
+
         # prepare base images for all octaves
         octaves = [preprocess(self.net, base_img)]
         for i in xrange(octave_n-1):
@@ -179,7 +179,7 @@ def get_layer_descriptor(args):
            
     layer = 'inception_' + layer_depths[l_depth] + '/' + layer_types[l_type]
 
-    print('\nLayer: ', layer, '\n')
+    print(''.join(['\nLayer: ', layer, '\n']))
 
     return layer
 
@@ -245,7 +245,7 @@ def get_source_image(args):
     else:
         source_path = make_snapshot(args.size)
 
-    print('\nBase image for the DeepDream: ', source_path, '\n')
+    print(''.join(['\nBase image for the DeepDream: ', source_path, '\n']))
 
     return source_path
 
