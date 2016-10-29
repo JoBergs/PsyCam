@@ -61,8 +61,9 @@ class PsyCam(object):
         self.objective = objective_L2
         self.octave_n = octaves
 
-        if end:
-            frame = self.deepdream(frame, end=end, octave_n=self.octave_n)
+        #if end:
+        # may it be a problem to reuse frame
+        frame = self.deepdream(frame, end=end, octave_n=self.octave_n)
 
         dream_path = source_path.replace('.jpg', '_dream.jpg')
 
@@ -142,7 +143,9 @@ def start_dream(args):
 
     psycam = PsyCam(net=net)
     psycam.iterated_dream(source_path=source_path, 
-                                             end=layer, octaves=octave)    
+                                             end=layer, octaves=100)    
+    #                                        end=layer, octaves=octave)    
+    # TEST!
 
 if __name__ == "__main__":
     try:
