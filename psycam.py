@@ -12,12 +12,12 @@ from google.protobuf import text_format
 os.environ["GLOG_minloglevel"] = "2"
 import caffe
 
+
 def make_snapshot(size=[500, 280]):    
     import picamera
 
     # prolly resolution can be passed as size
     camera = picamera.PiCamera(resolution=size)
-    #camera.resolution = size
 
     source_path = add_timestamp('./dreams/photo.jpg')
 
@@ -34,6 +34,17 @@ def add_timestamp(path):
     stamped_path = path.replace('.jpg', '_' + timestamp + '.jpg')
 
     return stamped_path
+
+
+def detect_rpi():
+    try:
+        with open('/proc/cpuinfo', 'r') as f:
+            if 'BCM2709' in f.read():
+                return True
+    except:
+        pass
+
+    return False
 
 
 def create_net(model_file):
@@ -150,16 +161,6 @@ class PsyCam(object):
         # returning the resulting image
         return deprocess(self.net, src.data[0])
 
-def detect_rpi():
-    try:
-        with open('/proc/cpuinfo', 'r') as f:
-            if 'BCM2709' in f.read():
-                return True
-    except:
-        pass
-
-    return False
-
 
 def start_dream(args, source_path):
     models_base = '../caffe/models'
@@ -183,16 +184,11 @@ def start_dream(args, source_path):
     # when running DeepDream on the RPi, restrict layer depth to 5 = '4d':
     # higher values crash the RPi
     if detect_rpi:
-        print(l_depth)
         l_depth = min(l_depth, 5)
-        print('layer type changed/RPI')
-        print(l_depth)
 
     psycam = PsyCam(net=net)
 
-    try:         
-
-        # overwrite octaves and layer with random values       
+    try:             
         layer = 'inception_' + layer_depths[l_depth] + '/' + layer_types[l_type]
 
         print('Image: ',  source_path, 'Layer: ', layer, 'Octave: ', octave)
@@ -233,8 +229,6 @@ def parse_arguments(sysargs):
     parser.add_argument('-o', '--octaves', nargs='?', metavar='int', type=int,
                                          choices=xrange(1, 12),
                                          help='The number of scales the algorithm is applied to')
-    # parser.add_argument('-r', '--random', action='store_true', 
-    #                                      help='Overwrite depth, layer type and octave with random values')
     parser.add_argument('-c', '--continually', action='store_true', 
                                          help='Run psycam in an endless loop')
     parser.add_argument('-i', '--input', nargs='?', metavar='path', type=str,
@@ -247,23 +241,18 @@ def parse_arguments(sysargs):
 
 if __name__ == "__main__":
     args = parse_arguments(sys.argv[1:])
-    print(args)
-    # import ipdb
-    # ipdb.set_trace()
 
     while True:
         # if there is a path to an image as input argument, use it
         if args.input:
             #source_path = args.input
-            # TOGGLE COMMENTING! this is just for generating cool images
+            # TOGGLE COMMENTING! line above against the two below
             source_path = add_timestamp(args.input)
             shutil.copyfile(args.input, source_path)
         else:
-            #apply width and height here
             source_path = make_snapshot(args.size)
         start_dream(args, source_path)
 
-        # TEST this!
         if not args.continually:
             break
 
