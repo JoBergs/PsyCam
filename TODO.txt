@@ -1,0 +1,3 @@
+* integrate iterated dreaming a la DD Google git repo
+
+* integrate kivy app

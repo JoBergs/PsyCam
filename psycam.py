@@ -57,27 +57,16 @@ class PsyCam(object):
         self.net = net
 
     def iterated_dream(self, source_path, end, octaves):
-        self.img = np.float32(PIL.Image.open(source_path))
+        frame = np.float32(PIL.Image.open(source_path))
         self.objective = objective_L2
         self.octave_n = octaves
-        self.end = end
 
-        # refactor this
-
-        frame = self.img
-
-        h, w = frame.shape[:2]
-        s = 0.05 # scale coefficient
-
-        if self.end:
-            frame = self.deepdream(frame, end=self.end, octave_n=self.octave_n)
-        else:            
-            frame = self.deepdream(frame, octave_n=self.octave_n)
+        if end:
+            frame = self.deepdream(frame, end=end, octave_n=self.octave_n)
 
         dream_path = source_path.replace('.jpg', '_dream.jpg')
 
         PIL.Image.fromarray(np.uint8(frame)).save(dream_path)
-        frame = nd.affine_transform(frame, [1-s,1-s,1], [h*s/2,w*s/2,0], order=1)
 
     def make_step(self, step_size=1.5, end='inception_4c/output', 
                   jitter=32, clip=True):
