@@ -63,8 +63,8 @@ def parse_arguments(sysargs):
                                          choices=xrange(1, 10),
                                          const=5, default=5, 
                                          help='The number of scales the algorithm is applied to')
-    parser.add_argument('-r', '--random', action='store_true', 
-                                         help='Overwrite depth, layer type and octave with random values')
+    # parser.add_argument('-r', '--random', action='store_true', 
+    #                                      help='Overwrite depth, layer type and octave with random values')
     parser.add_argument('-c', '--continually', action='store_true', 
                                          help='Run psycam in an endless loop')
     parser.add_argument('-i', '--input', nargs='?', metavar='path', type=str,
@@ -228,7 +228,7 @@ def start_dream(args, source_path):
 
 if __name__ == "__main__":
     args = parse_arguments(sys.argv[1:])
-    # print args
+    print args
     # import ipdb
     # ipdb.set_trace()
 
