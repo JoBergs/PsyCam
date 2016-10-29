@@ -44,10 +44,8 @@ def load_net(model_file):
 def preprocess(net, img):
     return np.float32(np.rollaxis(img, 2)[::-1]) - net.transformer.mean['data']
 
-
 def deprocess(net, img):
     return np.dstack((img + net.transformer.mean['data'])[::-1])
-
 
 # regular, non-guided objective
 def objective_L2(dst):
