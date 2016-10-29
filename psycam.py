@@ -178,7 +178,10 @@ def start_dream(args, source_path):
     # when running DeepDream on the RPi, restrict layer type to '4d':
     # higher values crash the RPi
     if detect_rpi:
+        print(l_type)
         l_type = min(l_type, 5)
+        print('layer type changed/RPI')
+        print(l_type)
 
     psycam = PsyCam(net=net)
 
