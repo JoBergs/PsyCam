@@ -1,34 +1,40 @@
 PsyCam
 ============
 
-* The installer is for the RPi, but may work on a bigger machine, too.
+![Alt text](sample_dream.jpg?raw=true "DeepDream")
 
-* The installation takes a few hours.
+Google DeepDream
+-----------------------------
+The Google DeepDream algorithm is a modified neural network. Instead of
+identifying objects in an input image, it changes the image into the direction
+of its training data set, which produces impressive surrealistic, dream-like images.
+You can find the original GitHub repository at
+https://github.com/google/deepdream/blob/master/dream.ipynb
 
-* This installs everything required for the original Google ipython notebook for DeepDream
-
-PsyCam is a psychedelic surveilance camera for capturing the paranomal
-and metaphysic activities around us; that is, a Raspberry Pi with
-an camera module makes a snapshot and prozesses the image with Googles
-DeepDream algorithm from Alexander Mordvintsev, Michael Tyka and
-Christopher Olah (see https://github.com/google/deepdream).
+PsyCam
+-------------------------
+PsyCam is an extension of the DeepDream for the Raspberry Pi. With the RPi
+camera module, PsyCam can make a photo and convert it into a DeepDream.
 
 Installation
--------------------------------
+------------------
+Either follow the manual installation instructions at
 
-The Installation of DeepDream is long, but simple; see this tutorial
-http://www.knight-of-pi.org/deepdream-on-the-raspberry-pi-3-with-raspbian-jessie/
-for installing PsyCam on a Raspberry Pi 2.
+    http://www.knight-of-pi.org/deepdream-on-the-raspberry-pi-3-with-raspbian-jessie/
 
-Autostart
---------------------------------
-Open the file ~/.bashrc and add the lines
+or perform the following steps on a Raspberry Pi with Raspbian Jessie 
+installed and the camera module being attached:
 
-    cd /home/ubuntu/deepdream/psycam
-    python psycam.py
+    $ mkdir ~/deepdream && cd ~/deepdream
+    $ git clone https://github.com/JoBergs/PsyCam
+    $ cd PsyCam
+    $ sudo python install_tools.py packages
+    $ sudo python install_tools.py caffe
+    $ sudo python install_tools.py protobuf
+    $ sudo python install_tools.py camera
+    $ sudo reboot
 
-Then, turn off the Rapsberry Pi, Disconnect it from everything but the camera and attach a battery.
-The Raspberry Pi will now make Snapshots and convert the to DeepDream images with googles recipe.
+The installation will take half a day or so.
 
 Usage
 -----------------------------------
@@ -52,12 +58,18 @@ Start PsyCam set layer depth, type and network octave manually:
 
     $python psycam.py -d 2 -t 1 -o 6
 
-Beware of the Critters!
-
-Output filename
+Output images
 --------------------------------
-The output filename will be the higest 5-digit integer number in ./dreams which
-is not occupied already, e.g. "00023.jpg". The Snapshot will be stored with the same Format but in
-./snaphots. Old dreams and snapshots are stored after starting PsyCam with a timestamp.
 
-* [Johannes Bergs](mailto:jo@knight-of-pi.org)
+The dreams are stored in
+
+    /home/pi/deepdream/PsyCam/dreams 
+
+with the original photo and tagged with a timestamp.
+
+
+Have fun
+---------------
+
+Author:
+[Johannes Bergs](mailto:jo@knight-of-pi.org)
