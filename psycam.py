@@ -19,17 +19,17 @@ from utils import get_layer_descriptor, get_source_image, parse_arguments
 
 
 def create_net(model_file):
-    net_fn = os.path.join(os.path.split(model_file)[0], 'deploy.prototxt')
+    # net_fn = os.path.join(os.path.split(model_file)[0], 'deploy.prototxt')
     param_fn = model_file
 
-    # Patching model to be able to compute gradients.
-    # Note that you can also manually add "force_backward: true" line to "deploy.prototxt".
-    model = caffe.io.caffe_pb2.NetParameter()
-    text_format.Merge(open(net_fn).read(), model)
-    model.force_backward = True
+    # # Patching model to be able to compute gradients.
+    # # Note that you can also manually add "force_backward: true" line to "deploy.prototxt".
+    # model = caffe.io.caffe_pb2.NetParameter()
+    # text_format.Merge(open(net_fn).read(), model)
+    # model.force_backward = True
 
-    # ONLY DO THIS WHEN THE FILE DOES NOT EXIST! TEST THAT
-    open('tmp.prototxt', 'w').write(str(model))
+    # # ONLY DO THIS WHEN THE FILE DOES NOT EXIST! TEST THAT
+    # open('tmp.prototxt', 'w').write(str(model))
 
     # probably mean needs to be CHANGED FOR OTHER NETS
     net = caffe.Classifier('tmp.prototxt', param_fn,
@@ -143,8 +143,7 @@ def start_dream(args):
     layer = get_layer_descriptor(args)
     octave = (args.octaves if args.octaves else randint(1, 9))
 
-    models_base = '../caffe/models'
-    net = create_net(os.path.join(models_base, 'bvlc_googlenet/bvlc_googlenet.caffemodel'))
+    net = create_net('../caffe/models/bvlc_googlenet/bvlc_googlenet.caffemodel')
     psycam = PsyCam(net=net)
     psycam.iterated_dream(source_path=source_path, 
                                              end=layer, octaves=octave)    
