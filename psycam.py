@@ -130,6 +130,7 @@ class PsyCam(object):
 
     def deepdream(self, base_img, iter_n=10, octave_n=4, octave_scale=1.4, 
                               end='inception_4c/output', clip=True, **step_params):
+    
         # prepare base images for all octaves
         octaves = [preprocess(self.net, base_img)]
         for i in xrange(octave_n-1):
@@ -162,26 +163,17 @@ class PsyCam(object):
         return deprocess(self.net, src.data[0])
 
 def get_layer_descriptor(args):
-    """ Process input arguments into layer descriptor and number of octaves. """
-
-    # split off octave
+    """ Process input arguments into a layer descriptor and return it. If the 
+    machine is an RPi, limit the layer depth to '4D'. """
 
     layer_depths = ['3a', '3b', '4a', '4b', '4c', '4d', '4e', '5a', '5b']
     layer_types = ['1x1', '3x3', '5x5', 'output', '5x5_reduce', '3x3_reduce']
 
-    # octave = randint(1, 9)
-    l_depth = randint(0, len(layer_depths)-1)
-    l_type = randint(0, len(layer_types)-1)
+    # if given, take the input parameter; use random value elseway
+    l_depth = (args.depth - 1 if args.depth else randint(0, len(layer_depths)-1))
+    l_type = (args.type - 1 if args.type else randint(0, len(layer_types)-1))
 
-    if args.depth:
-        l_depth = args.depth - 1
-    if args.type:
-        l_type = args.type - 1
-    # if args.octaves:
-    #     octave = args.octaves
-
-    # when running DeepDream on the RPi, restrict layer depth to 5 = '4d':
-    # higher values crash the RPi
+    # restrict layer depth to 5 = '4d' for the RPi: higher values would crash 
     if detect_rpi:
         l_depth = min(l_depth, 5)    
            
@@ -245,7 +237,7 @@ def parse_arguments(sysargs):
 
 def get_source_image(args):
     """ Input processing: if a source image is supplied, make a time-stamped
-    duplicate;  if no image is supplied, make a snapshot with the given format."""
+    duplicate;  if no image is supplied, make a snapshot."""
 
     if args.input:
         source_path = add_timestamp(args.input)
