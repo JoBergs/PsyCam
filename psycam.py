@@ -187,21 +187,15 @@ def start_dream(args, source_path):
         l_depth = min(l_depth, 5)
 
     psycam = PsyCam(net=net)
+           
+    layer = 'inception_' + layer_depths[l_depth] + '/' + layer_types[l_type]
 
-    try:             
-        layer = 'inception_' + layer_depths[l_depth] + '/' + layer_types[l_type]
+    print('Image: ',  source_path, 'Layer: ', layer, 'Octave: ', octave)
 
-        print('Image: ',  source_path, 'Layer: ', layer, 'Octave: ', octave)
+    psycam.iterated_dream(source_path=source_path, 
+                                             end=layer, octaves=octave)
 
-        psycam.iterated_dream(source_path=source_path, 
-                                                 end=layer, octaves=octave)
-        
-        time.sleep(1)
 
-    except Exception as e:
-        import traceback
-        print(traceback.format_exc())
-        print('Quitting PsyCam')
 
 def parse_arguments(sysargs):
     """ Setup the command line options. """
@@ -239,22 +233,32 @@ def parse_arguments(sysargs):
 
     return parser.parse_args(sysargs)
 
+def handle_source_image(args):
+    """ Input processing: if a source image is supplied, make a time-stamped
+    duplicate;  if no image is supplied, make a snapshot with the given format."""
+
+    if args.input:
+        source_path = add_timestamp(args.input)
+        shutil.copyfile(args.input, source_path)
+    else:
+        source_path = make_snapshot(args.size)
+
 if __name__ == "__main__":
-    args = parse_arguments(sys.argv[1:])
+    try:
+        args = parse_arguments(sys.argv[1:])
+        while True:
 
-    while True:
-        # if there is a path to an image as input argument, use it
-        if args.input:
-            #source_path = args.input
-            # TOGGLE COMMENTING! line above against the two below
-            source_path = add_timestamp(args.input)
-            shutil.copyfile(args.input, source_path)
-        else:
-            source_path = make_snapshot(args.size)
-        start_dream(args, source_path)
+            source_path = handle_source_image(args)
+            start_dream(args, source_path)
+            time.sleep(1)
 
-        if not args.continually:
-            break
+            if not args.continually:
+                break
+
+    except Exception as e:
+        import traceback
+        print(traceback.format_exc())
+        print('Quitting PsyCam')
 
 
 

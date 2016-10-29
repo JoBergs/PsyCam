@@ -3,7 +3,7 @@ PsyCam
 
 * The installer is for the RPi, but may work on a bigger machine, too.
 
-* The installation takes many hours.
+* The installation takes a few hours.
 
 * This installs everything required for the original Google ipython notebook for DeepDream
 
