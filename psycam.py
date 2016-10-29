@@ -151,11 +151,14 @@ class PsyCam(object):
         return deprocess(self.net, src.data[0])
 
 def detect_rpi():
-    #   FILL WITH LOGIC
-    with open('/proc/cpuinfo', 'r') as f:
-        print(f.read())
-        
-    return True
+    try:
+        with open('/proc/cpuinfo', 'r') as f:
+            if 'BCM2709' in f.read():
+                return True
+    except:
+        pass
+
+    return False
 
 
 def start_dream(args, source_path):
@@ -200,7 +203,7 @@ def start_dream(args, source_path):
         
         time.sleep(1)
 
-    except Exception, e:
+    except Exception as e:
         import traceback
         print(traceback.format_exc())
         print('Quitting PsyCam')
