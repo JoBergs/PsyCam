@@ -62,6 +62,8 @@ class PsyCam(object):
         self.octave_n = octaves
         self.end = end
 
+        # refactor this
+
         frame = self.img
 
         h, w = frame.shape[:2]
