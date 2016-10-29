@@ -148,7 +148,11 @@ def start_dream(args):
     layer = get_layer_descriptor(args)
     octave = (args.octaves if args.octaves else randint(1, 9))
 
-    net = create_net('../caffe/models/bvlc_googlenet/bvlc_googlenet.caffemodel')
+    model_file = '../caffe/models/bvlc_googlenet/bvlc_googlenet.caffemodel'
+
+    create_net(model_file)
+    net = load_net(model_file)
+    
     psycam = PsyCam(net=net)
     psycam.iterated_dream(source_path=source_path, 
                                              end=layer, octaves=octave)    
