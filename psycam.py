@@ -19,24 +19,29 @@ from utils import get_layer_descriptor, get_source_image, parse_arguments
 
 
 def create_net(model_file):
-    # net_fn = os.path.join(os.path.split(model_file)[0], 'deploy.prototxt')
-    param_fn = model_file
+    net_fn = os.path.join(os.path.split(model_file)[0], 'deploy.prototxt')
+    #param_fn = model_file
 
-    # # Patching model to be able to compute gradients.
-    # # Note that you can also manually add "force_backward: true" line to "deploy.prototxt".
-    # model = caffe.io.caffe_pb2.NetParameter()
-    # text_format.Merge(open(net_fn).read(), model)
-    # model.force_backward = True
+    # Patching model to be able to compute gradients.
+    # Note that you can also manually add "force_backward: true" line to "deploy.prototxt".
+    model = caffe.io.caffe_pb2.NetParameter()
+    text_format.Merge(open(net_fn).read(), model)
+    model.force_backward = True
 
-    # # ONLY DO THIS WHEN THE FILE DOES NOT EXIST! TEST THAT
-    # open('tmp.prototxt', 'w').write(str(model))
+    # ONLY DO THIS WHEN THE FILE DOES NOT EXIST! TEST THAT
+    open('tmp.prototxt', 'w').write(str(model))
 
     # probably mean needs to be CHANGED FOR OTHER NETS
-    net = caffe.Classifier('tmp.prototxt', param_fn,
+    # net = caffe.Classifier('tmp.prototxt', param_fn,
+    #                        mean = np.float32([104.0, 116.0, 122.0]), # ImageNet mean, training set dependent
+    #                        channel_swap = (2,1,0)) # the reference model has channels in BGR order instead of RGB
+    # return net
+
+def load_net(model_file):
+    net = caffe.Classifier('tmp.prototxt', model_file,
                            mean = np.float32([104.0, 116.0, 122.0]), # ImageNet mean, training set dependent
                            channel_swap = (2,1,0)) # the reference model has channels in BGR order instead of RGB
     return net
-
 
 # a couple of utility functions for converting to and from Caffe's input image layout
 def preprocess(net, img):
