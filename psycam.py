@@ -65,8 +65,8 @@ def parse_arguments(sysargs):
                                          help='The number of scales the algorithm is applied to')
     parser.add_argument('-r', '--random', action='store_true', 
                                          help='Overwrite depth, layer type and octave with random values')
-    parser.add_argument('-c', '--continually', action='store_false', 
-                                         help='Make a single snapshot instead of running permanently')
+    parser.add_argument('-c', '--continually', action='store_true', 
+                                         help='Run psycam in an endless loop')
     parser.add_argument('-i', '--input', nargs='?', metavar='path', type=str,
                                     help='Use the path passed behind -i as source for the dream')
     parser.add_argument('-s', '--size', nargs=2, type=int, metavar='x y', default=[500, 280],
