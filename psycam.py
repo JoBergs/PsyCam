@@ -207,11 +207,10 @@ def start_dream(args, source_path):
     try:         
 
         # overwrite octaves and layer with random values
-        if args.random == True:
-            octave = randint(1, 9)
-            l_index = randint(0, len(numbering)-1)
-            l_type = randint(0, len(layer_types)-1)
-           
+        octave = randint(1, 9)
+        l_index = randint(0, len(numbering)-1)
+        l_type = randint(0, len(layer_types)-1)
+       
         layer = 'inception_' + numbering[l_index] + '/' + layer_types[l_type]
 
         print('Image: ',  source_path, 'Layer: ', layer, 'Octave: ', octave)
