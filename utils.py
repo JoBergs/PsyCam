@@ -3,7 +3,9 @@
 # Container for various helper functions for PsyCam based on 
 # Google DeepDream.
 
-import argparse
+import argparse, datetime, shutil
+
+from random import randint
 
 
 def parse_arguments(sysargs):

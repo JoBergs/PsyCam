@@ -1,7 +1,7 @@
 #!/usr/bin/python
 #encoding:utf-8
 
-import datetime, os, sys, time, shutil, subprocess
+import os, sys
 
 from random import randint
 
@@ -154,7 +154,6 @@ if __name__ == "__main__":
         args = parse_arguments(sys.argv[1:])
         while True:
             start_dream(args)
-            time.sleep(1)
 
             if not args.continually:
                 break
