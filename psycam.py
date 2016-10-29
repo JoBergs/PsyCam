@@ -143,7 +143,7 @@ def start_dream(args):
 
     psycam = PsyCam(net=net)
     psycam.iterated_dream(source_path=source_path, 
-                                             end=layer, octaves=100)    
+                                             end=layer, octaves=20)    
     #                                        end=layer, octaves=octave)    
     # TEST!
 
