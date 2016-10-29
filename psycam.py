@@ -194,7 +194,7 @@ def start_dream(args, source_path):
     models_base = '../caffe/models'
     net = create_net(os.path.join(models_base, 'bvlc_googlenet/bvlc_googlenet.caffemodel'))
 
-    # deep layers may be too much for the RPi
+    # deep layers may be too much for the RPi (cut indexing depending on --ubuntu flag)
     numbering = ['3a', '3b', '4a', '4b', '4c', '4d', '4e', '5a', '5b']
     layer_types = ['1x1', '3x3', '5x5', 'output', '5x5_reduce', '3x3_reduce']
 
@@ -214,6 +214,7 @@ def start_dream(args, source_path):
            
         layer = 'inception_' + numbering[l_index] + '/' + layer_types[l_type]
 
+        print('Image: ',  source_path, 'Layer: ', layer, 'Octave: ', octave)
 
         psycam.iterated_dream(source_path=source_path, 
                                                  end=layer, octaves=octave)
