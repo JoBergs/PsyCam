@@ -161,7 +161,7 @@ class PsyCam(object):
         # returning the resulting image
         return deprocess(self.net, src.data[0])
 
-def get_net_parameters(args):
+def get_layer_descriptor(args):
     """ Process input arguments into layer descriptor and number of octaves. """
 
     # split off octave
@@ -169,7 +169,7 @@ def get_net_parameters(args):
     layer_depths = ['3a', '3b', '4a', '4b', '4c', '4d', '4e', '5a', '5b']
     layer_types = ['1x1', '3x3', '5x5', 'output', '5x5_reduce', '3x3_reduce']
 
-    octave = randint(1, 9)
+    # octave = randint(1, 9)
     l_depth = randint(0, len(layer_depths)-1)
     l_type = randint(0, len(layer_types)-1)
 
@@ -177,8 +177,8 @@ def get_net_parameters(args):
         l_depth = args.depth - 1
     if args.type:
         l_type = args.type - 1
-    if args.octaves:
-        octave = args.octaves
+    # if args.octaves:
+    #     octave = args.octaves
 
     # when running DeepDream on the RPi, restrict layer depth to 5 = '4d':
     # higher values crash the RPi
@@ -187,16 +187,17 @@ def get_net_parameters(args):
            
     layer = 'inception_' + layer_depths[l_depth] + '/' + layer_types[l_type]
 
-    print('\nLayer: ', layer, 'Octave: ', octave, '\n')
+    print('\nLayer: ', layer, '\n')
 
-    return layer, octave
+    return layer
 
 def start_dream(args):
     """ Gather all parameters (source image, layer descriptor and octave),
     create a net and start to dream. """
 
     source_path = get_source_image(args)
-    layer, octave = get_net_parameters(args)
+    layer = get_layer_descriptor(args)
+    octave = (args.octaves if args.octaves else randint(1, 9))
 
     models_base = '../caffe/models'
     net = create_net(os.path.join(models_base, 'bvlc_googlenet/bvlc_googlenet.caffemodel'))
