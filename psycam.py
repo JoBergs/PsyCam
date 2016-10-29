@@ -243,7 +243,8 @@ if __name__ == "__main__":
             source_path = make_snapshot(args.size)
         start_dream(args, source_path)
 
-        if args.continually:
+        # TEST this!
+        if not args.continually:
             break
 
 
