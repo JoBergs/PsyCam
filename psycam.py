@@ -206,7 +206,7 @@ def start_dream(args, source_path):
         l_index = args.depth - 1
     if args.type:
         l_type = args.type - 1
-    if args.octave:
+    if args.octaves:
         octave = args.octaves
 
     psycam = PsyCam(net=net)
