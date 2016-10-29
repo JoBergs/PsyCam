@@ -54,7 +54,7 @@ def parse_arguments(sysargs):
 
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument('-d', '--depth', nargs='?', metavar='int', type=int,
-                                    choices=xrange(1, 5),  const=5, default=5,
+                                    choices=xrange(1, 5), 
                                     help='Depth of the dream as an value between 1 and 10')
     parser.add_argument('-t', '--type', nargs='?', metavar='int', type=int,
                                     choices=xrange(1, 10),
@@ -197,19 +197,23 @@ def start_dream(args, source_path):
     numbering = ['3a', '3b', '4a', '4b', '4c', '4d', '4e', '5a', '5b']
     layer_types = ['1x1', '3x3', '5x5', 'output', '5x5_reduce', '3x3_reduce']
 
-    l_index = args.depth - 1
-    l_type = args.type - 1
-    octave = args.octaves
+    # move all of this in function preprocessing or something
+    octave = randint(1, 9)
+    l_index = randint(0, len(numbering)-1)
+    l_type = randint(0, len(layer_types)-1)
+
+    if args.depth:
+        l_index = args.depth - 1
+    if args.type:
+        l_type = args.type - 1
+    if args.octave:
+        octave = args.octaves
 
     psycam = PsyCam(net=net)
 
     try:         
 
-        # overwrite octaves and layer with random values
-        octave = randint(1, 9)
-        l_index = randint(0, len(numbering)-1)
-        l_type = randint(0, len(layer_types)-1)
-       
+        # overwrite octaves and layer with random values       
         layer = 'inception_' + numbering[l_index] + '/' + layer_types[l_type]
 
         print('Image: ',  source_path, 'Layer: ', layer, 'Octave: ', octave)
