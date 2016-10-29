@@ -186,12 +186,13 @@ def start_dream(args, source_path):
     if detect_rpi:
         l_depth = min(l_depth, 5)
 
-    psycam = PsyCam(net=net)
+    
            
     layer = 'inception_' + layer_depths[l_depth] + '/' + layer_types[l_type]
 
     print('Image: ',  source_path, 'Layer: ', layer, 'Octave: ', octave)
 
+    psycam = PsyCam(net=net)
     psycam.iterated_dream(source_path=source_path, 
                                              end=layer, octaves=octave)
 
@@ -242,6 +243,8 @@ def handle_source_image(args):
         shutil.copyfile(args.input, source_path)
     else:
         source_path = make_snapshot(args.size)
+
+    return source_path
 
 if __name__ == "__main__":
     try:
