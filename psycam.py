@@ -150,6 +150,10 @@ class PsyCam(object):
         # returning the resulting image
         return deprocess(self.net, src.data[0])
 
+def detect_rpi():
+    #   FILL WITH LOGIC
+    return True
+
 
 def start_dream(args, source_path):
     models_base = '../caffe/models'
@@ -173,7 +177,7 @@ def start_dream(args, source_path):
 
     # when running DeepDream on the RPi, restrict layer type to '4d':
     # higher values crash the RPi
-    if not args.ubuntu:
+    if not detect_rpi:
         l_type = min(l_type, 5)
 
     psycam = PsyCam(net=net)
