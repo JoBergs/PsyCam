@@ -160,16 +160,16 @@ def start_dream(args, source_path):
     net = create_net(os.path.join(models_base, 'bvlc_googlenet/bvlc_googlenet.caffemodel'))
 
     # deep layers may be too much for the RPi (cut indexing depending on --ubuntu flag)
-    numbering = ['3a', '3b', '4a', '4b', '4c', '4d', '4e', '5a', '5b']
+    layer_depths = ['3a', '3b', '4a', '4b', '4c', '4d', '4e', '5a', '5b']
     layer_types = ['1x1', '3x3', '5x5', 'output', '5x5_reduce', '3x3_reduce']
 
     # move all of this in function preprocessing or something
     octave = randint(1, 9)
-    l_index = randint(0, len(numbering)-1)
+    l_depth = randint(0, len(layer_depths)-1)
     l_type = randint(0, len(layer_types)-1)
 
     if args.depth:
-        l_index = args.depth - 1
+        l_depth = args.depth - 1
     if args.type:
         l_type = args.type - 1
     if args.octaves:
@@ -178,17 +178,17 @@ def start_dream(args, source_path):
     # when running DeepDream on the RPi, restrict layer type to '4d':
     # higher values crash the RPi
     if detect_rpi:
-        print(l_type)
-        l_type = min(l_type, 5)
+        print(l_depth)
+        l_depth = min(l_depth, 5)
         print('layer type changed/RPI')
-        print(l_type)
+        print(l_depth)
 
     psycam = PsyCam(net=net)
 
     try:         
 
         # overwrite octaves and layer with random values       
-        layer = 'inception_' + numbering[l_index] + '/' + layer_types[l_type]
+        layer = 'inception_' + layer_depths[l_depth] + '/' + layer_types[l_type]
 
         print('Image: ',  source_path, 'Layer: ', layer, 'Octave: ', octave)
 
