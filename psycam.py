@@ -19,8 +19,9 @@ from utils import get_layer_descriptor, get_source_image, parse_arguments
 
 
 def create_net(model_file):
+    """ Create the neural network tmp.prototxt. """
+
     net_fn = os.path.join(os.path.split(model_file)[0], 'deploy.prototxt')
-    #param_fn = model_file
 
     # Patching model to be able to compute gradients.
     # Note that you can also manually add "force_backward: true" line to "deploy.prototxt".
@@ -28,16 +29,12 @@ def create_net(model_file):
     text_format.Merge(open(net_fn).read(), model)
     model.force_backward = True
 
-    # ONLY DO THIS WHEN THE FILE DOES NOT EXIST! TEST THAT
     open('tmp.prototxt', 'w').write(str(model))
 
-    # probably mean needs to be CHANGED FOR OTHER NETS
-    # net = caffe.Classifier('tmp.prototxt', param_fn,
-    #                        mean = np.float32([104.0, 116.0, 122.0]), # ImageNet mean, training set dependent
-    #                        channel_swap = (2,1,0)) # the reference model has channels in BGR order instead of RGB
-    # return net
 
 def load_net(model_file):
+    """ Load the neural network tmp.prototxt.  """
+
     net = caffe.Classifier('tmp.prototxt', model_file,
                            mean = np.float32([104.0, 116.0, 122.0]), # ImageNet mean, training set dependent
                            channel_swap = (2,1,0)) # the reference model has channels in BGR order instead of RGB
@@ -150,9 +147,10 @@ def start_dream(args):
 
     model_file = '../caffe/models/bvlc_googlenet/bvlc_googlenet.caffemodel'
 
-    create_net(model_file)
+    if args.network:
+        create_net(model_file)
     net = load_net(model_file)
-    
+
     psycam = PsyCam(net=net)
     psycam.iterated_dream(source_path=source_path, 
                                              end=layer, octaves=octave)    

@@ -36,6 +36,8 @@ def parse_arguments(sysargs):
                                          help='The number of scales the algorithm is applied to')
     parser.add_argument('-c', '--continually', action='store_true', 
                                          help='Run psycam in an endless loop')
+    parser.add_argument('-n', '--network', action='store_true', 
+                                         help='Create neural network from model file')
     parser.add_argument('-i', '--input', nargs='?', metavar='path', type=str,
                                     help='Use the path passed behind -i as source for the dream')
     parser.add_argument('-s', '--size', nargs=2, type=int, metavar='width height', default=[500, 280],
