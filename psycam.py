@@ -103,7 +103,7 @@ class PsyCam(object):
         src = self.net.blobs['data']
         detail = np.zeros_like(octaves[-1]) # allocate image for network-produced details
 
-        print(enumerate(octaves[::-1]))
+        print(enumerate(octaves[::-1])[:])
 
         for octave, octave_base in enumerate(octaves[::-1]):
             h, w = octave_base.shape[-2:]
@@ -146,9 +146,7 @@ def start_dream(args):
 
     psycam = PsyCam(net=net)
     psycam.iterated_dream(source_path=source_path, 
-                                             end=layer, octaves=11)    
-    #                                        end=layer, octaves=octave)    
-    # TEST!
+                                             end=layer, octaves=octave)    
 
 if __name__ == "__main__":
     try:

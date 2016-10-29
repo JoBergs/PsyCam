@@ -33,7 +33,7 @@ def parse_arguments(sysargs):
                                     help='Layer type as an value between 1 and 6')
     parser.add_argument('-o', '--octaves', nargs='?', metavar='int', type=int,
                                          choices=xrange(1, 12),
-                                         help='The number of scales the algorithm is applied to')
+                                         help='The number of scales the neural network is applied for')
     parser.add_argument('-c', '--continually', action='store_true', 
                                          help='Run psycam in an endless loop')
     parser.add_argument('-n', '--network', action='store_true', 
