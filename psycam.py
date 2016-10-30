@@ -70,7 +70,7 @@ class PsyCam(object):
         PIL.Image.fromarray(np.uint8(frame)).save(dream_path)
 
     def make_step(self, step_size=1.5, end='inception_4c/output', 
-                  jitter=32, clip=True):
+                  jitter=32):
         """Basic gradient ascent step."""
 
         src = self.net.blobs['data'] # input image is stored in Net's 'data' blob
@@ -87,13 +87,12 @@ class PsyCam(object):
         src.data[:] += step_size/np.abs(g).mean() * g
 
         src.data[0] = np.roll(np.roll(src.data[0], -ox, -1), -oy, -2) # unshift image
-                
-        if clip:
-            bias = self.net.transformer.mean['data']
-            src.data[:] = np.clip(src.data, -bias, 255-bias)  
+
+        bias = self.net.transformer.mean['data']
+        src.data[:] = np.clip(src.data, -bias, 255-bias)  
 
     def deepdream(self, base_img, iter_n=10, octave_n=4, octave_scale=1.4, 
-                              end='inception_4c/output', clip=True, **step_params):
+                              end='inception_4c/output', **step_params):
 
         # prepare base images for all octaves
         octaves = [preprocess(self.net, base_img)]
@@ -115,7 +114,7 @@ class PsyCam(object):
             src.reshape(1,3,h,w) # resize the network's input image size
             src.data[0] = octave_base+detail
             for i in xrange(iter_n):
-                self.make_step(end=end, clip=clip, **step_params)
+                self.make_step(end=end, **step_params)
                 
                 # visualization
                 vis = deprocess(self.net, src.data[0])
