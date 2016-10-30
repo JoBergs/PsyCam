@@ -18,11 +18,10 @@ def parse_arguments(sysargs):
         See the original Googleresearch blog post
         http://googleresearch.blogspot.ch/2015/06/inceptionism-going-deeper-into-neural.html
         for more information or follow this
-        http://www.knight-of-pi.org/psycam-a-raspberry-pi-deepdream-surveilance-camera/
+        http://www.knight-of-pi.org/deepdream-on-the-raspberry-pi-3-with-raspbian-jessie/
         tutorial for installing PsyCam on a Raspberry Pi.
-        Try random surveilance with python psycam.py -r.
-        For using this script on an ubuntu system (non-rpi) without camera, 
-        give the parameter -i and the dream source file (*.jpg).'''
+        For using this script on an Ubuntu system (non-rpi) without a camera, 
+        give the parameter -i and a dream source file (e.g. sky_small.jpg).'''
 
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument('-d', '--depth', nargs='?', metavar='int', type=int,
@@ -37,7 +36,7 @@ def parse_arguments(sysargs):
     parser.add_argument('-c', '--continually', action='store_true', 
                                          help='Run psycam in an endless loop')
     parser.add_argument('-n', '--network', action='store_true', 
-                                         help='Create neural network from model file')
+                                         help='Create a new neural network model file')
     parser.add_argument('-i', '--input', nargs='?', metavar='path', type=str,
                                     help='Use the path passed behind -i as source for the dream')
     parser.add_argument('-s', '--size', nargs=2, type=int, metavar='width height', default=[500, 280],
@@ -84,6 +83,8 @@ def get_source_image(args):
 
 
 def make_snapshot(size=[500, 280]):    
+    """ Make a time-stamped snapshot with the picamera in the given size. """
+
     import picamera
 
     # prolly resolution can be passed as size

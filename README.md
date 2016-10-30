@@ -42,21 +42,29 @@ The script psycam.py is controlled via command-line parameters. They are listed 
 
     $python psycam.py --help
 
-Start PsyCam with the default _inception4c/output layer and octave 3:
+Start PsyCam with randomized layer and octave:
 
     $python psycam.py
 
-Start PsyCam with randomized layer and octave:
+Start PsyCam with and input image instead of a camera snapshot (required for non-RPi usage!):
 
-    $python psycam.py -r
+    $python psycam.py -i sky_small.jpg
 
-Make just a single snapshot/dream:
+Make snapshots with the given size width height (large sizes will crash the RPi):
 
-    $python psycam.py -s
+    $python psycam.py -s 400 300
 
-Start PsyCam set layer depth, type and network octave manually:
+Make snapshots and convert them to dreams continually:
+
+    $python psycam.py -c
+
+Start PsyCam set layer depth, type and octave manually:
 
     $python psycam.py -d 2 -t 1 -o 6
+
+Create a new network model file:
+
+    $python psycam.py -n
 
 Output images
 --------------------------------
