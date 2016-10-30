@@ -55,6 +55,8 @@ def objective_L2(dst):
     dst.diff[:] = dst.data 
 
 
+from IPython.display import clear_output, Image, display
+
 def showarray(a, fmt='jpeg'):
     a = np.uint8(np.clip(a, 0, 255))
     f = StringIO()
