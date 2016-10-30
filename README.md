@@ -14,7 +14,7 @@ https://github.com/google/deepdream/blob/master/dream.ipynb
 PsyCam
 -------------------------
 PsyCam is an extension of the DeepDream for the Raspberry Pi. With the RPi
-camera module, PsyCam can make a photo and convert it into a DeepDream.
+camera module, PsyCam can take a photo and convert it into a DeepDream.
 
 Installation
 ------------------
@@ -72,7 +72,7 @@ Output images
 
 The dreams are stored in
 
-    /home/pi/deepdream/PsyCam/dreams 
+    ~/deepdream/PsyCam/dreams 
 
 with the original photo and tagged with a timestamp.
 
