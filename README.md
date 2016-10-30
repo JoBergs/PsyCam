@@ -22,8 +22,7 @@ Either follow the manual installation instructions at
 
     http://www.knight-of-pi.org/deepdream-on-the-raspberry-pi-3-with-raspbian-jessie/
 
-or perform the following steps on a Raspberry Pi with Raspbian Jessie 
-installed and the camera module being attached:
+or perform the following steps for the semi-automated installation:
 
     $ mkdir ~/deepdream && cd ~/deepdream
     $ git clone https://github.com/JoBergs/PsyCam
@@ -34,7 +33,8 @@ installed and the camera module being attached:
     $ sudo python install_tools.py camera
     $ sudo reboot
 
-The installation will take half a day or so.
+The installation will take half a day or so. The installer script should also work
+on most modern Ubuntu systems.
 
 Usage
 -----------------------------------
@@ -42,11 +42,12 @@ The script psycam.py is controlled via command-line parameters. They are listed 
 
     $python psycam.py --help
 
-Start PsyCam with randomized layer and octave:
+Start PsyCam with randomized layer and octave. This requires an attached and enabled 
+Raspberry Pi camera module.
 
     $python psycam.py
 
-Start PsyCam with and input image instead of a camera snapshot (required for non-RPi usage!):
+Start PsyCam with an input image instead of a camera snapshot (required for non-RPi usage!):
 
     $python psycam.py -i sky_small.jpg
 
