@@ -55,15 +55,6 @@ def objective_L2(dst):
     dst.diff[:] = dst.data 
 
 
-from IPython.display import clear_output, Image, display
-
-def showarray(a, fmt='jpeg'):
-    a = np.uint8(np.clip(a, 0, 255))
-    f = StringIO()
-    PIL.Image.fromarray(a).save(f, fmt)
-    display(Image(data=f.getvalue()))
-
-
 class PsyCam(object):
     def __init__(self, net):        
         self.net = net
@@ -127,7 +118,8 @@ class PsyCam(object):
             for i in xrange(iter_n):
                 self.make_step(end=end, **step_params)
                 vis = deprocess(self.net, src.data[0])  # visualization
-                showarray(vis)               
+                # showarray(vis)
+                # is the visualisation used anywhere?  NO -REMOVE             
                 print(octave, i, end, vis.shape)
                 
             # extract details produced on the current octave
