@@ -89,7 +89,7 @@ class PsyCam(object):
         # apply normalized ascent step to the input image
         src.data[:] += step_size/np.abs(g).mean() * g
 
-        src.data[0] = np.roll(np.roll(src.data[0], -ox, -1), -oy, -2) # unshift image
+        #src.data[0] = np.roll(np.roll(src.data[0], -ox, -1), -oy, -2) # unshift image
                 
         bias = self.net.transformer.mean['data']
         src.data[:] = np.clip(src.data, -bias, 255-bias)  
