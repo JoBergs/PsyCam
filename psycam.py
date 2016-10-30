@@ -50,8 +50,8 @@ def deprocess(net, img):
 
 
 # regular, non-guided objective
-def objective_L2(dst):
-    dst.diff[:] = dst.data 
+def objective_L2(destination):
+    destination.diff[:] = destination.data 
 
 
 class PsyCam(object):
@@ -70,26 +70,30 @@ class PsyCam(object):
     def make_step(self, step_size=1.5, end='inception_4c/output', jitter=32):
         """Basic gradient ascent step."""
 
-        import ipdb
-        ipdb.set_trace()
+        # import ipdb
+        # ipdb.set_trace()
 
-        src = self.net.blobs['data'] # input image is stored in Net's 'data' blob
-        dst = self.net.blobs[end]
+        source = self.net.blobs['data'] # input image is stored in Net's 'data' blob
+        destination = self.net.blobs[end]
 
         ox, oy = np.random.randint(-jitter, jitter+1, 2)
-        src.data[0] = np.roll(np.roll(src.data[0], ox, -1), oy, -2) # apply jitter shift
+        source.data[0] = np.roll(np.roll(source.data[0], ox, -1), oy, -2) # apply jitter shift
                 
+        # forward processes aninput image, backward applies the error?
         self.net.forward(end=end)
-        objective_L2(dst)  # specify the optimization objective
+        # (fills destination.diff with values)
+        objective_L2(destination)  # specify the optimization objective
+        # destination changes after forward because it's mutable and linked to net.blobs[end]
         self.net.backward(start=end)
-        g = src.diff[0]
+        gradient = source.diff[0]
         # apply normalized ascent step to the input image
-        src.data[:] += step_size/np.abs(g).mean() * g
+        source.data[:] += step_size/np.abs(gradient).mean() * gradient
 
-        src.data[0] = np.roll(np.roll(src.data[0], -ox, -1), -oy, -2) # unshift image
+        source.data[0] = np.roll(np.roll(source.data[0], -ox, -1), -oy, -2) # unshift image
                 
         bias = self.net.transformer.mean['data']
-        src.data[:] = np.clip(src.data, -bias, 255-bias)  
+        # -bias because it's a descent? why 255-bias?
+        source.data[:] = np.clip(source.data, -bias, 255-bias)  
 
     def deepdream(self, base_img, iter_n=10, octave_n=4, octave_scale=1.4, 
                               end='inception_4c/output'):
@@ -103,7 +107,7 @@ class PsyCam(object):
         for i in xrange(octave_n-1):
             octaves.append(nd.zoom(octaves[-1], (1, 1.0/octave_scale,1.0/octave_scale), order=1))
         
-        src = self.net.blobs['data']  # original image
+        source = self.net.blobs['data']  # original image
         detail = np.zeros_like(octaves[-1]) # allocate image for network-produced details
         # create an array of zeroes in the format of the last (and biggest) octave
         # octaves: 
@@ -125,24 +129,24 @@ class PsyCam(object):
                 detail = nd.zoom(detail, (1, 1.0*h/h1, 1.0*w/w1), order=1)
                 # make detail as big as the current octave
 
-            src.reshape(1, 3, h, w) # resize the network's input image size
+            source.reshape(1, 3, h, w) # resize the network's input image size
             # add the detail to the source image?
-            src.data[0] = octave_base + detail
+            source.data[0] = octave_base + detail
             for i in xrange(iter_n):
                 self.make_step(end=end)
                 #print(step_params)
                 # BREAK this earlier and output the image for better understanding
 
                 # 
-                #vis = deprocess(self.net, src.data[0])  # visualization
+                #vis = deprocess(self.net, source.data[0])  # visualization
                 # showarray(vis)
                 # is the visualisation used anywhere?  NO -REMOVE             
                 #print(octave, i, end, vis.shape)
                 
             # extract details produced on the current octave
-            detail = src.data[0] - octave_base
+            detail = source.data[0] - octave_base
         # returning the resulting image
-        return deprocess(self.net, src.data[0])
+        return deprocess(self.net, source.data[0])
 
 
 def start_dream(args):
