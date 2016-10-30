@@ -78,9 +78,8 @@ class PsyCam(object):
         src = self.net.blobs['data'] # input image is stored in Net's 'data' blob
         dst = self.net.blobs[end]
 
-        # WHAT happens without the jitter?
-        # ox, oy = np.random.randint(-jitter, jitter+1, 2)
-        # src.data[0] = np.roll(np.roll(src.data[0], ox, -1), oy, -2) # apply jitter shift
+        ox, oy = np.random.randint(-jitter, jitter+1, 2)
+        src.data[0] = np.roll(np.roll(src.data[0], ox, -1), oy, -2) # apply jitter shift
                 
         self.net.forward(end=end)
         objective_L2(dst)  # specify the optimization objective
@@ -89,7 +88,7 @@ class PsyCam(object):
         # apply normalized ascent step to the input image
         src.data[:] += step_size/np.abs(g).mean() * g
 
-        #src.data[0] = np.roll(np.roll(src.data[0], -ox, -1), -oy, -2) # unshift image
+        src.data[0] = np.roll(np.roll(src.data[0], -ox, -1), -oy, -2) # unshift image
                 
         bias = self.net.transformer.mean['data']
         src.data[:] = np.clip(src.data, -bias, 255-bias)  
@@ -118,6 +117,8 @@ class PsyCam(object):
             src.data[0] = octave_base+detail
             for i in xrange(iter_n):
                 self.make_step(end=end, **step_params)
+                if i == 1:
+                    break
                 # BREAK this earlier and output the image for better understanding
 
                 #vis = deprocess(self.net, src.data[0])  # visualization
