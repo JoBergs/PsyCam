@@ -57,12 +57,13 @@ class PsyCam(object):
         self.net = net
 
     def iterated_dream(self, source_path, end, octaves):
+        import ipdb
+        ipdb.set_trace()
+
         frame = np.float32(PIL.Image.open(source_path))
         self.objective = objective_L2
         self.octave_n = octaves
 
-        #if end:
-        # may it be a problem to reuse frame
         frame = self.deepdream(frame, end=end, octave_n=self.octave_n)
 
         dream_path = source_path.replace('.jpg', '_dream.jpg')
