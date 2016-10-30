@@ -117,10 +117,10 @@ class PsyCam(object):
             src.data[0] = octave_base+detail
             for i in xrange(iter_n):
                 self.make_step(end=end, **step_params)
-                vis = deprocess(self.net, src.data[0])  # visualization
+                #vis = deprocess(self.net, src.data[0])  # visualization
                 # showarray(vis)
                 # is the visualisation used anywhere?  NO -REMOVE             
-                print(octave, i, end, vis.shape)
+                #print(octave, i, end, vis.shape)
                 
             # extract details produced on the current octave
             detail = src.data[0]-octave_base
