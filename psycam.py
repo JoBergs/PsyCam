@@ -78,8 +78,9 @@ class PsyCam(object):
         src = self.net.blobs['data'] # input image is stored in Net's 'data' blob
         dst = self.net.blobs[end]
 
-        ox, oy = np.random.randint(-jitter, jitter+1, 2)
-        src.data[0] = np.roll(np.roll(src.data[0], ox, -1), oy, -2) # apply jitter shift
+        # WHAT happens without the jitter?
+        # ox, oy = np.random.randint(-jitter, jitter+1, 2)
+        # src.data[0] = np.roll(np.roll(src.data[0], ox, -1), oy, -2) # apply jitter shift
                 
         self.net.forward(end=end)
         objective_L2(dst)  # specify the optimization objective
@@ -117,6 +118,8 @@ class PsyCam(object):
             src.data[0] = octave_base+detail
             for i in xrange(iter_n):
                 self.make_step(end=end, **step_params)
+                # BREAK this earlier and output the image for better understanding
+
                 #vis = deprocess(self.net, src.data[0])  # visualization
                 # showarray(vis)
                 # is the visualisation used anywhere?  NO -REMOVE             
