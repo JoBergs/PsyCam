@@ -94,7 +94,7 @@ class PsyCam(object):
         src.data[:] = np.clip(src.data, -bias, 255-bias)  
 
     def deepdream(self, base_img, iter_n=10, octave_n=4, octave_scale=1.4, 
-                              end='inception_4c/output', **step_params):
+                              end='inception_4c/output'):
 
         # prepare base images for all octaves
         octaves = [preprocess(self.net, base_img)]
@@ -106,6 +106,8 @@ class PsyCam(object):
 
         #print(list(enumerate(octaves[::-1])))
 
+        # step_params may not be necessary
+
         for octave, octave_base in enumerate(octaves[::-1]):
             h, w = octave_base.shape[-2:]
             if octave > 0:
@@ -116,8 +118,8 @@ class PsyCam(object):
             src.reshape(1,3,h,w) # resize the network's input image size
             src.data[0] = octave_base+detail
             for i in xrange(iter_n):
-                self.make_step(end=end, **step_params)
-                print(step_params)
+                self.make_step(end=end)
+                #print(step_params)
                 # BREAK this earlier and output the image for better understanding
 
                 #vis = deprocess(self.net, src.data[0])  # visualization
