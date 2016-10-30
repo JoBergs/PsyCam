@@ -45,7 +45,6 @@ def load_net(model_file):
 def preprocess(net, img):
     return np.float32(np.rollaxis(img, 2)[::-1]) - net.transformer.mean['data']
 
-
 def deprocess(net, img):
     return np.dstack((img + net.transformer.mean['data'])[::-1])
 
@@ -66,11 +65,13 @@ class PsyCam(object):
         frame = self.deepdream(frame, end=end, octave_n=self.octave_n)
 
         dream_path = source_path.replace('.jpg', '_dream.jpg')
-
         PIL.Image.fromarray(np.uint8(frame)).save(dream_path)
 
     def make_step(self, step_size=1.5, end='inception_4c/output', jitter=32):
         """Basic gradient ascent step."""
+
+        import ipdb
+        ipdb.set_trace()
 
         src = self.net.blobs['data'] # input image is stored in Net's 'data' blob
         dst = self.net.blobs[end]
@@ -93,15 +94,16 @@ class PsyCam(object):
     def deepdream(self, base_img, iter_n=10, octave_n=4, octave_scale=1.4, 
                               end='inception_4c/output'):
 
-        import ipdb
-        ipdb.set_trace()
+        # try to store a low-level octave as image and watch it
+
+        # nd.zoom(input_data, (z_scale, x_scale, y_scale), order=intensity_curve_interpolation)
 
         # prepare base images for all octaves
         octaves = [preprocess(self.net, base_img)]
         for i in xrange(octave_n-1):
             octaves.append(nd.zoom(octaves[-1], (1, 1.0/octave_scale,1.0/octave_scale), order=1))
         
-        src = self.net.blobs['data']
+        src = self.net.blobs['data']  # original image
         detail = np.zeros_like(octaves[-1]) # allocate image for network-produced details
         # create an array of zeroes in the format of the last (and biggest) octave
         # octaves: 
@@ -110,17 +112,22 @@ class PsyCam(object):
 
         # step_params may not be necessary
 
-        # what, exactly, is details and what octaveß
+        # what, exactly, is details and what octave?
+
+        # shape 
 
         for octave, octave_base in enumerate(octaves[::-1]):
+            # extract the octave size
             h, w = octave_base.shape[-2:]
             if octave > 0:
                 # upscale details from the previous octave
                 h1, w1 = detail.shape[-2:]
                 detail = nd.zoom(detail, (1, 1.0*h/h1, 1.0*w/w1), order=1)
+                # make detail as big as the current octave
 
-            src.reshape(1,3,h,w) # resize the network's input image size
-            src.data[0] = octave_base+detail
+            src.reshape(1, 3, h, w) # resize the network's input image size
+            # add the detail to the source image?
+            src.data[0] = octave_base + detail
             for i in xrange(iter_n):
                 self.make_step(end=end)
                 #print(step_params)
@@ -133,7 +140,7 @@ class PsyCam(object):
                 #print(octave, i, end, vis.shape)
                 
             # extract details produced on the current octave
-            detail = src.data[0]-octave_base
+            detail = src.data[0] - octave_base
         # returning the resulting image
         return deprocess(self.net, src.data[0])
 
