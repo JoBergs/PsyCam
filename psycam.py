@@ -117,7 +117,7 @@ class PsyCam(object):
             src.data[0] = octave_base+detail
             for i in xrange(iter_n):
                 self.make_step(end=end, **step_params)
-                if i == 1:
+                if i == 5:
                     break
                 # BREAK this earlier and output the image for better understanding
 
