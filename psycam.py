@@ -40,16 +40,26 @@ def load_net(model_file):
                            channel_swap = (2,1,0)) # the reference model has channels in BGR order instead of RGB
     return net
 
+
 # a couple of utility functions for converting to and from Caffe's input image layout
 def preprocess(net, img):
     return np.float32(np.rollaxis(img, 2)[::-1]) - net.transformer.mean['data']
 
+
 def deprocess(net, img):
     return np.dstack((img + net.transformer.mean['data'])[::-1])
+
 
 # regular, non-guided objective
 def objective_L2(dst):
     dst.diff[:] = dst.data 
+
+
+def showarray(a, fmt='jpeg'):
+    a = np.uint8(np.clip(a, 0, 255))
+    f = StringIO()
+    PIL.Image.fromarray(a).save(f, fmt)
+    display(Image(data=f.getvalue()))
 
 
 class PsyCam(object):
@@ -114,7 +124,8 @@ class PsyCam(object):
             src.data[0] = octave_base+detail
             for i in xrange(iter_n):
                 self.make_step(end=end, **step_params)
-                vis = deprocess(self.net, src.data[0])  # visualization               
+                vis = deprocess(self.net, src.data[0])  # visualization
+                showarray(vis)               
                 print(octave, i, end, vis.shape)
                 
             # extract details produced on the current octave
