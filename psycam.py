@@ -60,9 +60,6 @@ class PsyCam(object):
         self.net = net
 
     def iterated_dream(self, source_path, end, octaves):
-        import ipdb
-        ipdb.set_trace()
-
         frame = np.float32(PIL.Image.open(source_path))
         self.octave_n = octaves
 
@@ -95,6 +92,9 @@ class PsyCam(object):
 
     def deepdream(self, base_img, iter_n=10, octave_n=4, octave_scale=1.4, 
                               end='inception_4c/output'):
+
+        import ipdb
+        ipdb.set_trace()
 
         # prepare base images for all octaves
         octaves = [preprocess(self.net, base_img)]
