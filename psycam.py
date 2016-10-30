@@ -57,11 +57,10 @@ class PsyCam(object):
         self.net = net
 
     def iterated_dream(self, source_path, end, octaves):
-        import ipdb
-        ipdb.set_trace()
+        # import ipdb
+        # ipdb.set_trace()
 
         frame = np.float32(PIL.Image.open(source_path))
-        self.objective = objective_L2
         self.octave_n = octaves
 
         frame = self.deepdream(frame, end=end, octave_n=self.octave_n)
@@ -80,7 +79,7 @@ class PsyCam(object):
         src.data[0] = np.roll(np.roll(src.data[0], ox, -1), oy, -2) # apply jitter shift
                 
         self.net.forward(end=end)
-        self.objective(dst)  # specify the optimization objective
+        objective_L2(dst)  # specify the optimization objective
         self.net.backward(start=end)
         g = src.diff[0]
         # apply normalized ascent step to the input image
