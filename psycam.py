@@ -60,8 +60,8 @@ class PsyCam(object):
         self.net = net
 
     def iterated_dream(self, source_path, end, octaves):
-        # import ipdb
-        # ipdb.set_trace()
+        import ipdb
+        ipdb.set_trace()
 
         frame = np.float32(PIL.Image.open(source_path))
         self.octave_n = octaves
@@ -103,17 +103,21 @@ class PsyCam(object):
         
         src = self.net.blobs['data']
         detail = np.zeros_like(octaves[-1]) # allocate image for network-produced details
+        # create an array of zeroes in the format of the last (and biggest) octave
+        # octaves: 
 
         #print(list(enumerate(octaves[::-1])))
 
         # step_params may not be necessary
+
+        # what, exactly, is details and what octaveß
 
         for octave, octave_base in enumerate(octaves[::-1]):
             h, w = octave_base.shape[-2:]
             if octave > 0:
                 # upscale details from the previous octave
                 h1, w1 = detail.shape[-2:]
-                detail = nd.zoom(detail, (1, 1.0*h/h1,1.0*w/w1), order=1)
+                detail = nd.zoom(detail, (1, 1.0*h/h1, 1.0*w/w1), order=1)
 
             src.reshape(1,3,h,w) # resize the network's input image size
             src.data[0] = octave_base+detail
@@ -122,6 +126,7 @@ class PsyCam(object):
                 #print(step_params)
                 # BREAK this earlier and output the image for better understanding
 
+                # 
                 #vis = deprocess(self.net, src.data[0])  # visualization
                 # showarray(vis)
                 # is the visualisation used anywhere?  NO -REMOVE             
