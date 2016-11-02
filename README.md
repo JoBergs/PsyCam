@@ -14,7 +14,7 @@ https://github.com/google/deepdream/blob/master/dream.ipynb
 PsyCam
 -------------------------
 PsyCam is an extension of the DeepDream for the Raspberry Pi. With the RPi
-camera module, PsyCam can make a photo and convert it into a DeepDream.
+camera module, PsyCam can take a photo and convert it into a DeepDream.
 
 Installation
 ------------------
@@ -22,8 +22,7 @@ Either follow the manual installation instructions at
 
     http://www.knight-of-pi.org/deepdream-on-the-raspberry-pi-3-with-raspbian-jessie/
 
-or perform the following steps on a Raspberry Pi with Raspbian Jessie 
-installed and the camera module being attached:
+or perform the following steps for the semi-automated installation:
 
     $ mkdir ~/deepdream && cd ~/deepdream
     $ git clone https://github.com/JoBergs/PsyCam
@@ -34,7 +33,8 @@ installed and the camera module being attached:
     $ sudo python install_tools.py camera
     $ sudo reboot
 
-The installation will take half a day or so.
+The installation will take half a day or so. The installer script should also work
+on most modern Ubuntu systems.
 
 Usage
 -----------------------------------
@@ -42,28 +42,37 @@ The script psycam.py is controlled via command-line parameters. They are listed 
 
     $python psycam.py --help
 
-Start PsyCam with the default _inception4c/output layer and octave 3:
+Start PsyCam with randomized layer and octave. This requires an attached and enabled 
+Raspberry Pi camera module.
 
     $python psycam.py
 
-Start PsyCam with randomized layer and octave:
+Start PsyCam with an input image instead of a camera snapshot (required for non-RPi usage!):
 
-    $python psycam.py -r
+    $python psycam.py -i sky_small.jpg
 
-Make just a single snapshot/dream:
+Make snapshots with the given size width height (large sizes will crash the RPi):
 
-    $python psycam.py -s
+    $python psycam.py -s 400 300
 
-Start PsyCam set layer depth, type and network octave manually:
+Make snapshots and convert them to dreams continually:
+
+    $python psycam.py -c
+
+Start PsyCam set layer depth, type and octave manually:
 
     $python psycam.py -d 2 -t 1 -o 6
+
+Create a new network model file:
+
+    $python psycam.py -n
 
 Output images
 --------------------------------
 
 The dreams are stored in
 
-    /home/pi/deepdream/PsyCam/dreams 
+    ~/deepdream/PsyCam/dreams 
 
 with the original photo and tagged with a timestamp.
 
