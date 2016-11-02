@@ -60,47 +60,13 @@ class PsyCam(object):
 
     def iterated_dream(self, source_path, end, octaves):
         frame = np.float32(PIL.Image.open(source_path))
-        self.octave_n = octaves
 
-        frame = self.deepdream(frame, end=end, octave_n=self.octave_n)
-
+        frame = self.deepdream(frame, end=end, octave_n=octaves)
         dream_path = source_path.replace('.jpg', '_dream.jpg')
         PIL.Image.fromarray(np.uint8(frame)).save(dream_path)
 
-    def make_step(self, step_size=1.5, end='inception_4c/output', jitter=32):
-        """Basic gradient ascent step."""
-
-        # import ipdb
-        # ipdb.set_trace()
-
-        source = self.net.blobs['data'] # input image is stored in Net's 'data' blob
-        destination = self.net.blobs[end]
-
-        ox, oy = np.random.randint(-jitter, jitter+1, 2)
-        source.data[0] = np.roll(np.roll(source.data[0], ox, -1), oy, -2) # apply jitter shift
-                
-        # forward processes aninput image, backward applies the error?
-        self.net.forward(end=end)
-        # (fills destination.diff with values)
-        objective_L2(destination)  # specify the optimization objective
-        # destination changes after forward because it's mutable and linked to net.blobs[end]
-        self.net.backward(start=end)
-        gradient = source.diff[0]
-        # apply normalized ascent step to the input image
-        source.data[:] += step_size/np.abs(gradient).mean() * gradient
-
-        source.data[0] = np.roll(np.roll(source.data[0], -ox, -1), -oy, -2) # unshift image
-                
-        bias = self.net.transformer.mean['data']
-        # -bias because it's a descent? why 255-bias?
-        source.data[:] = np.clip(source.data, -bias, 255-bias)  
-
     def deepdream(self, base_img, iter_n=10, octave_n=4, octave_scale=1.4, 
                               end='inception_4c/output'):
-
-        # try to store a low-level octave as image and watch it
-
-        # nd.zoom(input_data, (z_scale, x_scale, y_scale), order=intensity_curve_interpolation)
 
         # prepare base images for all octaves
         octaves = [preprocess(self.net, base_img)]
@@ -109,44 +75,46 @@ class PsyCam(object):
         
         source = self.net.blobs['data']  # original image
         detail = np.zeros_like(octaves[-1]) # allocate image for network-produced details
-        # create an array of zeroes in the format of the last (and biggest) octave
-        # octaves: 
-
-        #print(list(enumerate(octaves[::-1])))
-
-        # step_params may not be necessary
-
-        # what, exactly, is details and what octave?
-
-        # shape 
 
         for octave, octave_base in enumerate(octaves[::-1]):
-            # extract the octave size
-            h, w = octave_base.shape[-2:]
+            h, w = octave_base.shape[-2:]  # octave size
             if octave > 0:
-                # upscale details from the previous octave
+                # upscale details from previous octave
                 h1, w1 = detail.shape[-2:]
                 detail = nd.zoom(detail, (1, 1.0*h/h1, 1.0*w/w1), order=1)
-                # make detail as big as the current octave
 
             source.reshape(1, 3, h, w) # resize the network's input image size
-            # add the detail to the source image?
             source.data[0] = octave_base + detail
+
             for i in xrange(iter_n):
                 self.make_step(end=end)
-                #print(step_params)
-                # BREAK this earlier and output the image for better understanding
-
-                # 
-                #vis = deprocess(self.net, source.data[0])  # visualization
-                # showarray(vis)
-                # is the visualisation used anywhere?  NO -REMOVE             
-                #print(octave, i, end, vis.shape)
                 
             # extract details produced on the current octave
             detail = source.data[0] - octave_base
-        # returning the resulting image
-        return deprocess(self.net, source.data[0])
+
+        return deprocess(self.net, source.data[0])  # return final image
+
+    def make_step(self, step_size=1.5, end='inception_4c/output', jitter=32):
+        """Basic gradient ascent step."""
+
+        source = self.net.blobs['data'] # input image is stored in Net's 'data' blob
+        destination = self.net.blobs[end]
+
+        ox, oy = np.random.randint(-jitter, jitter+1, 2)
+        source.data[0] = np.roll(np.roll(source.data[0], ox, -1), oy, -2) # apply jitter shift
+                
+        self.net.forward(end=end)  # step in direction of the target layer
+        objective_L2(destination)  # specify the optimization objective
+        self.net.backward(start=end) # step in direction of the input layer
+
+        # apply normalized ascent step to the input image
+        gradient = source.diff[0]        
+        source.data[:] += step_size/np.abs(gradient).mean() * gradient
+
+        source.data[0] = np.roll(np.roll(source.data[0], -ox, -1), -oy, -2) # unshift image
+                
+        bias = self.net.transformer.mean['data']
+        source.data[:] = np.clip(source.data, -bias, 255-bias)  
 
 
 def start_dream(args):
