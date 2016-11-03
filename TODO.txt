@@ -1,13 +1,11 @@
-* make image size input arguments with min and max values
-
-* make the installer compatible with other linux systems
-
 * make a minimised image and share it
 
 * software tests
 
-* improve the installer: warn for failed downloads (BVLC specifically)
+* improve the installer: 
+    warn for failed downloads (BVLC specifically)
     (maybe host a copy of these files)
+    light_dm requested input when installing packages
 
 * add other training data sets
 
@@ -16,3 +14,5 @@
 * integrate iterated dreaming a la DD Google git repo
 
 * integrate kivy app
+
+* remove protobuf dependency with a seperate net installation script
