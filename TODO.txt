@@ -16,3 +16,5 @@
 * integrate kivy app
 
 * remove protobuf dependency with a seperate net installation script
+
+* maybe scikit-image needs to be installed for running on a host computer
