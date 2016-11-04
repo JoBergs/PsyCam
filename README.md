@@ -27,10 +27,10 @@ or perform the following steps for the semi-automated installation:
     $ mkdir ~/deepdream && cd ~/deepdream
     $ git clone https://github.com/JoBergs/PsyCam
     $ cd PsyCam
-    $ sudo python install_tools.py packages
-    $ sudo python install_tools.py caffe
-    $ sudo python install_tools.py protobuf
-    $ sudo python install_tools.py camera
+    $ python install_tools.py packages
+    $ python install_tools.py caffe
+    $ python install_tools.py protobuf
+    $ python install_tools.py camera
     $ sudo reboot
 
 The installation will take half a day or so. The installer script should also work
