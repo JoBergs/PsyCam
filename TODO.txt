@@ -1,6 +1,6 @@
 * make a minimised image and share it
 
-* software tests
+* add software tests
 
 * improve the installer: 
     warn for failed downloads (BVLC specifically)
